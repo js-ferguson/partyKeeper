@@ -8,3 +8,5 @@ from rest_framework.generics import ListAPIView
 class ItemsView(ListAPIView):
     authentication_class = (JSONWebTokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+
+    
