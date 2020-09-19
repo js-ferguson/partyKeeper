@@ -15,3 +15,70 @@ There should be a way to have several characters kept in the application that ma
 The application will be built on either PostgreSLQ or MariaDB. The application front end will be written in Vue.js and will consume an API that is driven by the Django REST Framework and use JWT authentication 
 
 The frontend will also utilise the DND5E API for things like character creation, spells, classes, levels etc
+
+
+## Setup
+
+Clone the repo
+
+cretate a virtual environment to install deps into and activate it. Then install your deps
+
+```bash
+python -m venv venv && source venv/bin/activate
+
+pip install -r requirements.txt
+
+```
+
+You will need MySQL or MariaDB
+
+```bash
+sudo apt update
+sudo apt install mariadb-server
+sudo mysql_secure_installation
+
+```
+
+Connnect to the DB as the root user and create a new database, admin user and a user for partyKeeper
+
+```bash
+sudo mysql
+
+> CREATE DATABASE partyKeeper
+
+> GRANT ALL ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+> CREATE USER 'pkUser'@'localhost' IDENTIFIED BY 'somePassword';
+
+> GRANT ALL ON 'partyKeeper'.* TO 'pkUser'@'localhost';
+
+> FLUSH PRIVILEGES;
+
+```
+
+create an env file and move your secret key and database details there
+
+```python
+import os
+
+os.environ.setdefault("DB_USER", 'pkUser')
+
+os.environ.setdefault("DB_PASS", 'somePassword')
+
+os.environ.setdefault("DB_ADDRESS", "localhost")
+
+os.environ.setdefault("DB_NAME", "partyKeeper")
+```
+
+run your migrations create a superuser
+
+```bash
+python manage.py makemigrations && python manage.py migrate
+python manage.py createsuperuser
+```
+
+create a branch and get to work
+
+```bash
+git checkout -b new_branch
+```
