@@ -1,19 +1,21 @@
 '''
 Character class aim to provide basics stats and functionality to
 player characters. It should offer an easy method of attaching item
-objects that update local variables which represent various stats of 
+objects that update local variables which represent various stats of
 the character.
 
 This class is intended to be subclassed to provide stats and abilities
 that define player characters and NPCs
 '''
 
-import from universe dice
+from universe.dice import dice as d
 
 
 class Character:
-    ''' takes a json object describing the basic character attributes'''
+    '''
+    takes a json object describing the basic character attributes
 
+    '''
     def __init__(self, character_attr):
         self.str = character_attr.str
         self.dex = character_attr.dex
@@ -37,10 +39,16 @@ class Character:
         if it contains an inventory key
         '''
 
-    def add_slot(self, number_to_add):
-       '''
-       methods that create slots in the db and attach them
-       to character
+    def create_slot(self, number_to_add):
+        '''
+        methods that create slots in the db and attach them
+        to character
 
-       should this be a class or a method
-       '''
+        should this be a class or a method
+        '''
+
+    def attach_to_slot(self, item):
+        '''
+        this should be a call to the api to attach an item
+        to a slot
+        '''
