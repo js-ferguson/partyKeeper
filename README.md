@@ -16,6 +16,9 @@ The application will be built on either PostgreSLQ or MariaDB. The application f
 
 The frontend will also utilise the DND5E API for things like character creation, spells, classes, levels etc
 
+## Character architecture
+
+data from the database will be provived by 
 
 ## Setup
 
