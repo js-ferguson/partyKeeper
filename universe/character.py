@@ -24,6 +24,8 @@ class Character:
         self.wiz = character_attr.wis
         self.health = character_attr.health
         self.armor = character_attr.armor
+        self.hit_dice = character_attr.hit_dice
+
         self.int_mod = self.dex
 
     def calc_initiative(self, dex):

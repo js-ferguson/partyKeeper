@@ -18,7 +18,6 @@ from django.urls import path, re_path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
