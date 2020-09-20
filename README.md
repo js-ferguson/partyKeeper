@@ -85,3 +85,24 @@ create a branch and get to work
 ```bash
 git checkout -b new_branch
 ```
+
+
+## Build
+
+There may be several dependencies that need to be installed. For instance you may
+need the mysql driver installed and other python packages for to build those drivers.
+I will add all that later
+
+For now just have two terminal windows open and in one, from inside the project run
+
+```bash
+cd pkFrontend
+npm run dev
+```
+
+in the other terminal 
+```bash
+python3 manage.py runserver 5000
+```
+
+probably a good idea to create an alias for that:w
