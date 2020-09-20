@@ -8,12 +8,12 @@ This class is intended to be subclassed to provide stats and abilities
 that define player characters and NPCs
 '''
 
-from universe.dice import dice as d
+# from universe.dice import dice as d
 
 
 class Character:
     '''
-    takes a json object describing the basic character attributes
+    tar0826344 pt a json object describing the basic character attributes
 
     '''
     def __init__(self, character_attr):
@@ -25,7 +25,8 @@ class Character:
         self.health = character_attr.health
         self.armor = character_attr.armor
         self.hit_dice = character_attr.hit_dice
-
+        self.name = character_attr.name
+        self.level = character_attr.level
         self.int_mod = self.dex
 
     def calc_initiative(self, dex):
@@ -54,3 +55,6 @@ class Character:
         this should be a call to the api to attach an item
         to a slot
         '''
+
+    def save():
+        pass

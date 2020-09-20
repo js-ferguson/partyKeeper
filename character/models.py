@@ -20,6 +20,7 @@ class Character(models.Model):
     str = models.IntegerField()
     ac = models.IntegerField()
     hp = models.IntegerField()
+    level = models.IntegerField(default=1)
     hit_dice = models.IntegerField(default=0)
     inventory = models.OneToOneField(Inventory, on_delete=models.CASCADE)
     slots = models.ForeignKey(Slot, on_delete=models.CASCADE)

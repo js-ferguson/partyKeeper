@@ -1,15 +1,23 @@
 from django.shortcuts import render
-from .models import Character
+from universe.character import Character
+
+from .models import Character as Cha_model
 
 
-def a_view(request):
+def create_character(request):
     '''
     just playing around with character class and json serialization
     '''
+    if request.method == 'POST':
+        #char = Cha_model(name=request.POST.name, )
+        print(request)
+        #char.save()
+        #return char
 
-    def create_new_character():
-        user = 
+    return render(request, 'template.html')
 
-    char = Character(object):
+
+def get_characters(request):
+    characters = Character
 
     return render(request)
