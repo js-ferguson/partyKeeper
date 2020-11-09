@@ -104,5 +104,3 @@ in the other terminal
 ```bash
 python3 manage.py runserver 5000
 ```
-
-probably a good idea to create an alias for that:w

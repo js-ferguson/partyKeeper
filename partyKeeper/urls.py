@@ -15,12 +15,19 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.middleware import csrf
+from django.http import JsonResponse
 from django.urls import include, path, re_path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
+def get_csrf_token(request):
+    token = csrf.get_token(request)
+    return JsonResponse({'token': token})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
+    re_path(r'^get-csrf-token/$', get_csrf_token),
     path('', include('character.urls')),
 ]

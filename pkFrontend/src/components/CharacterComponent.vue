@@ -3,13 +3,21 @@
     <h1>{{ msg }}</h1>
     <hr>
     <div class="col-md-6 left">
-      {{ characterTitle }}
+      <h4>{{ characterTitle }}</h4>
+      <form v-on:submit.prevent="createCharacter()">
+      <input type="hidden" name="csrfmiddlewaretoken" v-bind:value="csrfToken">
+      <input v-model="inputName" placeholder="Name:" name="name" type="text">
+      <input v-model="inputClass" placeholder="Class:" name="class" type="text">
+      <button class="btn btn-primary">Submit</button>
+      </form>
     </div>
     <div class="col-md-6 right">
      {{ statsTitle }}
+     <div>{{ chara_name }}</div>
     </div>
     <div class="col-md-12 bottom">
-      {{ inventoryTitle }}
+      <div>{{ inventoryTitle }}</div>
+      <div>{{ chara_class }}</div>
     </div>
   </div>
 </template>
@@ -21,8 +29,16 @@ export default {
   name: 'CharacterPage',
   data () {
     return {
+      token: '',
+      csrfToken: '',
       msg: 'Party Keeper',
+      username: 'jimi',
+      password: '35ufn0c',
       characterTitle: 'Character',
+      chara_name: '',
+      chara_class: '',
+      inputName: '',
+      inputClass: '',
       statsTitle: 'Stats',
       inventoryTitle: 'Inventory',
       gear: {
@@ -56,10 +72,58 @@ export default {
       }
     }
   },
+
+  created () {
+    this.csrfToken = this.$store.getCSRF
+    this.token = this.$store.getToken
+  },
+
+  asyncComputed: {
+    getToken () {
+      this.token = this.$store.state.token
+    },
+
+    getCSRF () {
+      this.csrfToken = this.$store.state.token
+    }
+  //   getToken () {
+  //     axios
+  //       .post('auth/obtain_token/')
+  //       .then(response => {
+  //         console.log(response.data)
+  //         this.token = response.data
+  //       })
+  //       .catch(error => {
+  //         console.log(error.data)
+  //       })
+  //   }
+  },
+
+  mounted () {
+    this.token = this.$store.state.token
+    this.csrfToken = this.$store.state.token
+  },
+
   methods: {
+
+    createCharacter () {
+      const formData = {
+        name: this.inputName,
+        class: this.inputClass
+      }
+      axios
+        .post('api/character/create/', formData)
+        .then(response => {
+          console.log(response.data)
+          this.chara_name = response.data.returncontent
+        }).catch(error => {
+          console.log(error.data)
+        })
+    },
+
     getArmor () {
       axios
-        .get('https://ourdjangoapi/gear/armor')
+        .post('https://ourdjangoapi/gear/armor')
         .then((response) => {
           console.log(response.data)
         // reveives a list of gear objects which can be loaded onto the character
