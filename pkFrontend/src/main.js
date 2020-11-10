@@ -24,17 +24,17 @@ library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt)
 Vue.config.productionTip = false
 Vue.use(AsyncComputed)
 
-const token = store.getToken
-const csrftoken = store.getCSRF
+// const token = store.getToken
+// const csrftoken = store.getCSRF
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('ValidationProvider', ValidationProvider)
 
-axios.defaults.baseURL = 'http://localhost:5000/'
+axios.defaults.baseURL = 'http://localhost:8000/'
 // axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-axios.defaults.headers.common['X-CSRFToken'] = csrftoken
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+// axios.defaults.headers.common['X-CSRFToken'] = csrftoken
+// axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
 /* eslint-disable no-new */
 new Vue({
