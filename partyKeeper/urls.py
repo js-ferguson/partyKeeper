@@ -19,6 +19,9 @@ from django.middleware import csrf
 from django.http import JsonResponse
 from django.urls import include, path, re_path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from django.conf.urls import url
+from allauth.account.views import confirm_email
+
 
 def get_csrf_token(request):
     token = csrf.get_token(request)
@@ -29,5 +32,10 @@ urlpatterns = [
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
     re_path(r'^get-csrf-token/$', get_csrf_token),
+
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^account/', include('allauth.urls')),
+    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
     path('', include('character.urls')),
 ]
