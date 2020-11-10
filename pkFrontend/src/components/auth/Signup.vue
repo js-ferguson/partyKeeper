@@ -83,9 +83,8 @@ export default {
       const formData = {
         email: this.email,
         password1: this.password,
-        password2: this.confirmPassword,
+        password2: this.confirmPassword
         // hobbies: this.hobbyInputs.map(hobby => hobby.value),
-        terms: this.terms
       }
       console.log(formData)
       axios.post('rest-auth/registration/', formData)

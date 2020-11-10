@@ -30,7 +30,7 @@ Vue.use(AsyncComputed)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('ValidationProvider', ValidationProvider)
 
-axios.defaults.baseURL = 'http://localhost:8000/'
+axios.defaults.baseURL = 'http://localhost:5000/'
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // axios.defaults.headers.common['X-CSRFToken'] = csrftoken

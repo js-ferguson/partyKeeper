@@ -102,6 +102,7 @@ export default {
   mounted () {
     this.token = this.$store.state.token
     this.csrfToken = this.$store.state.token
+    this.getUser()
   },
 
   methods: {
@@ -129,6 +130,16 @@ export default {
         // reveives a list of gear objects which can be loaded onto the character
         })
         .catch((error) => {
+          console.log(error.data)
+        })
+    },
+
+    getUser () {
+      axios
+        .get('rest-auth/user/')
+        .then(res => {
+          console.log(res.data)
+        }).catch(error => {
           console.log(error.data)
         })
     }
