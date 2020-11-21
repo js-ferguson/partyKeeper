@@ -18,7 +18,7 @@ The frontend will also utilise the DND5E API for things like character creation,
 
 ## Character architecture
 
-data from the database will be provived by 
+![PartyKeeper Architecture](https://imgur.com/TtuTfff)
 
 ## Setup
 
