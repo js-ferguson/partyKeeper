@@ -8,9 +8,11 @@ import AsyncComputed from 'vue-async-computed'
 import axios from 'axios'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { ValidationProvider } from 'vee-validate'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import {
   faHome,
   faUser,
@@ -23,6 +25,8 @@ library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt)
 
 Vue.config.productionTip = false
 Vue.use(AsyncComputed)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 // const token = store.getToken
 // const csrftoken = store.getCSRF
