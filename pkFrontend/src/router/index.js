@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import CharacterComponent from '@/components/CharacterComponent'
 import SignupPage from '@/components/auth/Signup.vue'
 import SigninPage from '@/components/auth/Signin.vue'
+import PartyKeeper from '@/components/PartyKeeper.vue'
 
 Vue.use(Router)
 
@@ -12,8 +13,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'CharacterHome',
-      component: CharacterComponent
+      name: 'PartyKeeper',
+      component: PartyKeeper
     },
     {
       path: '/character',
