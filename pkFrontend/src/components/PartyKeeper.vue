@@ -21,11 +21,11 @@
         name="csrfmiddlewaretoken"
         v-bind:value="csrfToken"
       />
-      <input v-model="username" placeholder="Username:" name="name" type="text" />
+      <input v-model="email" placeholder="Email:" name="email" type="text" />
       <input
-        v-model="password"
+        v-model="password1"
         placeholder="Password:"
-        name="password"
+        name="password1"
         type="text"
       />
       <input
@@ -59,10 +59,11 @@ export default {
     return {
       token: '',
       csrfToken: '',
+      headers: {'csrfToken': this.csrfToken},
       showSignUp: 0,
       msg: 'Party Keeper',
-      username: '',
-      password: '',
+      email: '',
+      password1: '',
       password2: '',
       characterTitle: 'Character',
       charaName: '',
@@ -136,6 +137,14 @@ export default {
   },
 
   methods: {
+    register () {
+      const data = { 'email': this.email, 'password1': this.password1, 'password2': this.password2 }
+      axios
+        .post('http://localhost:5000/rest-auth/registration/', data, this.headers)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
 
     getArmor () {
       axios
