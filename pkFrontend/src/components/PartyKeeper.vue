@@ -1,41 +1,72 @@
 <template>
   <div class="root-div">
-    <h1 style='float: left;'>{{ msg }}</h1>
-    <b-button class="btn btn-primary" style="float: right;" v-b-modal.signUpModal>Sign Up!</b-button>
-    <hr style="clear: both;">
+    <h1 style="float: left">{{ msg }}</h1>
+    <b-button
+      class="btn btn-primary"
+      style="float: right; margin-left: 5px"
+      v-b-modal.loginModal
+      >Login</b-button
+    >
+    <b-button class="btn btn-primary" style="float: right" v-b-modal.signUpModal
+      >Sign Up!</b-button
+    >
+    <hr style="clear: both" />
     <div class="col-md-6 left">
-     <character-component :csrfToken="csrfToken"></character-component>
+      <character-component :csrfToken="csrfToken"></character-component>
     </div>
     <div class="col-md-6 right">
-     <stats-component :title="statsTitle" :chara-name="charaName"></stats-component>
+      <stats-component
+        :title="statsTitle"
+        :chara-name="charaName"
+      ></stats-component>
     </div>
     <div class="col-md-12 bottom">
       <inventory-component :title="inventoryTitle"></inventory-component>
     </div>
     <!-- SignUp Modal -->
     <b-modal id="signUpModal" title="Sign Up">
-      <p class="my-4">Hello from modal!</p>
+      <p class="my-4">Welcome Traveller</p>
       <form v-on:submit.prevent="register()">
-      <input
-        type="hidden"
-        name="csrfmiddlewaretoken"
-        v-bind:value="csrfToken"
-      />
-      <input v-model="email" placeholder="Email:" name="email" type="text" />
-      <input
-        v-model="password1"
-        placeholder="Password:"
-        name="password1"
-        type="text"
-      />
-      <input
-        v-model="password2"
-        placeholder="Confirm Password:"
-        name="password2"
-        type="text"
-      />
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+        <input
+          type="hidden"
+          name="csrfmiddlewaretoken"
+          v-bind:value="csrfToken"
+        />
+        <input v-model="email" placeholder="Email:" name="email" type="text" />
+        <input
+          v-model="password1"
+          placeholder="Password:"
+          name="password1"
+          type="text"
+        />
+        <input
+          v-model="password2"
+          placeholder="Confirm Password:"
+          name="password2"
+          type="text"
+        />
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </b-modal>
+    <!-- Login Modal -->
+    <!-- SignUp Modal -->
+    <b-modal id="loginModal" title="Login">
+      <p class="my-4">Welcome Back</p>
+      <form v-on:submit.prevent="login()">
+        <input
+          type="hidden"
+          name="csrfmiddlewaretoken"
+          v-bind:value="csrfToken"
+        />
+        <input v-model="email" placeholder="Email:" name="email" type="text" />
+        <input
+          v-model="password1"
+          placeholder="Password:"
+          name="password1"
+          type="text"
+        />
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </b-modal>
   </div>
 </template>
@@ -47,7 +78,6 @@ import InventoryComponent from './InventoryComponent'
 import StatsComponent from './StatsComponent'
 
 export default {
-
   components: {
     CharacterComponent,
     InventoryComponent,
@@ -59,7 +89,9 @@ export default {
     return {
       token: '',
       csrfToken: '',
-      headers: {'csrfToken': this.csrfToken},
+      // api_token: this.$store.getters.getApiToken,
+      headers: { csrfToken: this.csrfToken },
+      user: null,
       showSignUp: 0,
       msg: 'Party Keeper',
       email: '',
@@ -109,6 +141,12 @@ export default {
     this.token = this.$store.getToken
   },
 
+  computed: {
+    api_token () {
+      return this.$store.getters.getApiToken
+    }
+  },
+
   asyncComputed: {
     getToken () {
       this.token = this.$store.state.token
@@ -117,53 +155,78 @@ export default {
     getCSRF () {
       this.csrfToken = this.$store.state.token
     }
-  //   getToken () {
-  //     axios
-  //       .post('auth/obtain_token/')
-  //       .then(response => {
-  //         console.log(response.data)
-  //         this.token = response.data
-  //       })
-  //       .catch(error => {
-  //         console.log(error.data)
-  //       })
-  //   }
+    //   getToken () {
+    //     axios
+    //       .post('auth/obtain_token/')
+    //       .then(response => {
+    //         console.log(response.data)
+    //         this.token = response.data
+    //       })
+    //       .catch(error => {
+    //         console.log(error.data)
+    //       })
+    //   }
   },
 
   mounted () {
     this.token = this.$store.state.token
     this.csrfToken = this.$store.state.token
-    this.getUser()
+    // this.getUser()
   },
 
   methods: {
     register () {
-      const data = { 'email': this.email, 'password1': this.password1, 'password2': this.password2 }
+      const data = {
+        email: this.email,
+        password1: this.password1,
+        password2: this.password2
+      }
       axios
-        .post('http://localhost:5000/rest-auth/registration/', data, this.headers)
-        .then(response => {
-          console.log(response.data)
-        })
-    },
-
-    getArmor () {
-      axios
-        .post('https://ourdjangoapi/gear/armor')
+        .post(
+          'http://localhost:5000/rest-auth/registration/',
+          data,
+          this.headers
+        )
         .then((response) => {
           console.log(response.data)
-        // reveives a list of gear objects which can be loaded onto the character
-        })
-        .catch((error) => {
-          console.log(error.data)
         })
     },
 
-    getUser () {
+    login () {
+      const data = { email: this.email, password: this.password1 }
       axios
-        .get('rest-auth/user/')
-        .then(res => {
+        .post('http://localhost:5000/rest-auth/login/', data, this.headers)
+        .then((response) => {
+          // console.log(response.data.key)
+          this.$store.commit('setApiToken', response.data.key)
+          // console.log(this.$store.getters.getApiToken)
+          console.log(this.api_token)
+          this.getUser()
+        })
+    },
+
+    // getArmor() {
+    //   axios
+    //     .post('https://ourdjangoapi/gear/armor')
+    //     .then((response) => {
+    //       console.log(response.data);
+    //       // reveives a list of gear objects which can be loaded onto the character
+    //     })
+    //     .catch((error) => {
+    //       console.log(error.data);
+    //     });
+    // },
+
+    getUser () {
+      const headers = {
+        headers: { Authorization: `Bearer ${this.api_token}` }
+      }
+      axios
+        .get('rest-auth/user/', headers)
+        .then((res) => {
           console.log(res.data)
-        }).catch(error => {
+        })
+        .catch((error) => {
           console.log(error.data)
         })
     }
@@ -173,7 +236,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {
