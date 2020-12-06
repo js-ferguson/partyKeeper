@@ -8,9 +8,10 @@ export default new Vuex.Store({
   state: {
     token: '',
     csrfToken: '',
+    api_token: '',
     authUser: {
-      username: 'jimi',
-      password: '35ufn0c'
+      username: '',
+      password: ''
     }
   },
 
@@ -21,6 +22,10 @@ export default new Vuex.Store({
 
     getCSRF: state => {
       return state.token
+    },
+
+    getApiToken: state => {
+      return state.api_token
     }
 
     // getCSRF: state => {
@@ -77,6 +82,10 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error.data)
         })
+    },
+
+    setApiToken: (state, token) => {
+      state.api_token = token
     }
   }
 })
