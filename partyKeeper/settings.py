@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'itemManager',
     'character',
     'users',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,8 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
+    'JWT_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_payload_handler',
 }
 # Django-allauth settings
 
@@ -199,3 +202,4 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
 }
 
+REST_USE_JWT = True

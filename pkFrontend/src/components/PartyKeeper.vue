@@ -45,11 +45,28 @@
           name="password2"
           type="text"
         />
+        <input
+          v-model="dob"
+          placeholder="Date of Birth:"
+          name="dob"
+          type="text"
+        />
+        <input
+          v-model="first_name"
+          placeholder="First Name:"
+          name="first_name"
+          type="text"
+        />
+        <input
+          v-model="last_name"
+          placeholder="Last Name:"
+          name="last_name"
+          type="text"
+        />
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </b-modal>
     <!-- Login Modal -->
-    <!-- SignUp Modal -->
     <b-modal id="loginModal" title="Login">
       <p class="my-4">Welcome Back</p>
       <form v-on:submit.prevent="login()">
@@ -95,6 +112,9 @@ export default {
       showSignUp: 0,
       msg: 'Party Keeper',
       email: '',
+      dob: '',
+      first_name: '',
+      last_name: '',
       password1: '',
       password2: '',
       characterTitle: 'Character',
@@ -179,30 +199,33 @@ export default {
       const data = {
         email: this.email,
         password1: this.password1,
-        password2: this.password2
+        password2: this.password2,
+        first_name: this.first_name,
+        last_name: this.last_name,
+        date_of_birth: this.dob
       }
-      axios
-        .post(
-          'http://localhost:5000/rest-auth/registration/',
-          data,
-          this.headers
-        )
-        .then((response) => {
-          console.log(response.data)
-        })
+      this.$store.dispatch('signup', data)
     },
 
     login () {
       const data = { email: this.email, password: this.password1 }
-      axios
-        .post('http://localhost:5000/rest-auth/login/', data, this.headers)
-        .then((response) => {
-          // console.log(response.data.key)
-          this.$store.commit('setApiToken', response.data.key)
-          // console.log(this.$store.getters.getApiToken)
-          console.log(this.api_token)
-          this.getUser()
-        })
+      this.$store.dispatch('login', data)
+    },
+
+    getJwtToken () {
+      const data = { email: this.email, password: this.password1 }
+      this.$store.commit('setToken', data)
+      console.log(this.token)
+      // this.getUser()
+      // axios
+      //   .post('http://localhost:5000/auth/obtain_token/', data, this.headers)
+      //   .then((response) => {
+      //     // console.log(response.data.key)
+      //     // this.$store.commit('setApiToken', response.data.key)
+      //     // console.log(this.$store.getters.getApiToken)
+      //     console.log(response)
+      //     // this.getUser()
+      //   })
     },
 
     // getArmor() {
@@ -219,10 +242,10 @@ export default {
 
     getUser () {
       const headers = {
-        headers: { Authorization: `Bearer ${this.api_token}` }
+        headers: { Authorization: `Bearer ${this.api_token}`, csrfToken: this.csrfToken }
       }
       axios
-        .get('rest-auth/user/', headers)
+        .get('rest-auth/user/', {}, headers)
         .then((res) => {
           console.log(res.data)
         })
