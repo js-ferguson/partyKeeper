@@ -16,7 +16,8 @@ class CustomUser(AbstractUser):
 
     first_name = models.CharField(blank=True, max_length=100)
     last_name = models.CharField(blank=True, max_length=100)
-    date_of_birth = models.DateField(blank=True, null=True)
+    screen_name = models.CharField(max_length=30)
+    # date_of_birth = models.DateField(blank=True, null=True)
     
 
     def __str__(self):
