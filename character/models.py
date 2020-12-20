@@ -1,7 +1,10 @@
 from django.core import serializers
 from django.db import models
 from itemManager.models import Inventory, Item
+from party.models import Party
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Slot(models.Model):
     '''
@@ -15,6 +18,9 @@ class Slot(models.Model):
 
 class Character(models.Model):
     name = models.CharField(max_length=50)
+    party = models.ForeignKey(Party, on_delete=models.DO_NOTHING, null=True)
+    famous_last_words = models.CharField(max_length=125, blank=True) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     int = models.IntegerField()
     dex = models.IntegerField()
     str = models.IntegerField()

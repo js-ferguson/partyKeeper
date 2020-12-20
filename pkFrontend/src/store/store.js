@@ -9,10 +9,7 @@ export default new Vuex.Store({
     token: '',
     csrfToken: '',
     api_token: '',
-    authUser: {
-      username: '',
-      password: ''
-    }
+    authUser: {}
   },
 
   getters: {
@@ -56,6 +53,10 @@ export default new Vuex.Store({
 
     setApiToken: (state, token) => {
       state.api_token = token
+    },
+
+    setAuthUser: (state, user) => {
+      state.authUser = user
     }
   },
 
@@ -86,6 +87,7 @@ export default new Vuex.Store({
         .post('http://localhost:5000/rest-auth/login/', authData, {headers: {'X-CSRFToken': state.csrfToken}})
         .then((response) => {
           commit('setApiToken', response.data.token)
+          commit('setAuthUser', response.data.user)
           this.user = response.data.user
           console.log(this.api_token)
           console.log(this.user)

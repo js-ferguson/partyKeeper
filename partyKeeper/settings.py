@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'character',
     'users',
     'django_extensions',
+    'party',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +97,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:8080?verification=1'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:8080?verification=1'
+ACCOUNT_FORMS = {
+'signup': 'users.forms.CustomSignupForm',
+}
+# ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.SignupForm'
 
 SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
