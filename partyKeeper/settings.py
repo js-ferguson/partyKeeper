@@ -96,7 +96,12 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:8080?verification=1'
+<<<<<<< HEAD
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:8080?verification=1'
+=======
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:8080?verification=1'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True 
+>>>>>>> feat_jf_add-party-app-and-model
 ACCOUNT_FORMS = {
 'signup': 'users.forms.CustomSignupForm',
 }

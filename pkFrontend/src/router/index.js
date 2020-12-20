@@ -11,8 +11,13 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'PartyKeeper',
+    //   component: PartyKeeper
+    // },
     {
-      path: '/',
+      path: '/:verification?',
       name: 'PartyKeeper',
       component: PartyKeeper
     },

@@ -72,7 +72,7 @@ export default new Vuex.Store({
           console.log(error.data)
         })
     },
-    signup ({commit, state}, authData) {
+    signup ({commit, dispatch, state}, authData) {
       axios
         .post(
           'http://localhost:5000/rest-auth/registration/',
@@ -80,8 +80,26 @@ export default new Vuex.Store({
         )
         .then((response) => {
           console.log(response.data)
+          commit('setAuthUser', authData)
+          dispatch('storeUser', state.authUser)
+          // here we need to dipatch the storeUser action and pass it the form data containing
+          // the rest of the signup form data. Pass in state.authUser
         })
     },
+    storeUser ({commit, state}, userData) {
+      // This needs to be an axios post to a endpoint that updates user details in the database
+      axios
+        .post(
+          'http://localhost:5000/user/storeUser/',
+          userData, {headers: {'X-CSRFToken': state.csrfToken}}
+        )
+        .then((response) => {
+          console.log(response.data)
+          // here we need to dipatch the storeUser action and pass it the form data containing
+          // the rest of the signup form data.
+        })
+    },
+
     login ({commit, state}, authData) {
       axios
         .post('http://localhost:5000/rest-auth/login/', authData, {headers: {'X-CSRFToken': state.csrfToken}})
