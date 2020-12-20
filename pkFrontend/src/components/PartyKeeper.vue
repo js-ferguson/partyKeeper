@@ -24,8 +24,8 @@
       <inventory-component :title="inventoryTitle"></inventory-component>
     </div>
     <!-- SignUp Modal -->
-    <b-modal id="signUpModal" title="Sign Up">
-      <p class="my-4">Welcome Traveller</p>
+    <b-modal id="signUpModal" title="Welcome Traveller">
+      <p class="">Sign up for PartyKeeper</p>
       <form v-on:submit.prevent="register()">
         <input
           type="hidden"
@@ -34,36 +34,37 @@
         />
         <input v-model="email" placeholder="Email:" name="email" type="text" />
         <input
-          v-model="password1"
-          placeholder="Password:"
-          name="password1"
-          type="text"
-        />
-        <input
-          v-model="password2"
-          placeholder="Confirm Password:"
-          name="password2"
-          type="text"
-        />
-        <input
-          v-model="dob"
-          placeholder="Date of Birth:"
-          name="dob"
-          type="text"
-        />
-        <input
-          v-model="first_name"
-          placeholder="First Name:"
+          v-model="screen_name"
+          placeholder="Screen Name:"
           name="first_name"
           type="text"
         />
         <input
-          v-model="last_name"
-          placeholder="Last Name:"
-          name="last_name"
+          v-model="password1"
+          placeholder="Password:"
+          name="password1"
+          type="password"
+        />
+        <input
+          class="mt-2"
+          v-model="password2"
+          placeholder="Confirm Password:"
+          name="password2"
+          type="password"
+        />
+        <div class="mt-2">
+          <input v-model="dungeon_master" type="checkbox" id="dungeon_master" name="dungeon_master" checked />
+          <label for="dungeon_master">Are you a DM creating a new party?</label>
+        </div>
+        <input v-if="dungeon_master"
+          v-model="party_name"
+          placeholder="Party Name:"
+          name="party_name"
           type="text"
         />
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary mt-4" style="float: left;">Submit</button>
+        </div>
       </form>
     </b-modal>
     <!-- Login Modal -->
@@ -117,6 +118,9 @@ export default {
       last_name: '',
       password1: '',
       password2: '',
+      dungeon_master: false,
+      party_name: '',
+      screen_name: '',
       characterTitle: 'Character',
       charaName: '',
       charaClass: '',
@@ -191,6 +195,7 @@ export default {
   mounted () {
     this.token = this.$store.state.token
     this.csrfToken = this.$store.state.token
+    this.verification_login()
     // this.getUser()
   },
 
@@ -200,11 +205,18 @@ export default {
         email: this.email,
         password1: this.password1,
         password2: this.password2,
-        first_name: this.first_name,
-        last_name: this.last_name,
-        date_of_birth: this.dob
+        party_name: this.party_name,
+        dungeon_master: this.dungeon_master
       }
       this.$store.dispatch('signup', data)
+    },
+
+    verification_login () {
+      const data = { email: this.email, password: this.password1 }
+      if (this.$route.query.verification === '1') {
+        console.log('verification = 1')
+        this.$store.dispatch('login', data)
+      }
     },
 
     login () {
@@ -242,7 +254,10 @@ export default {
 
     getUser () {
       const headers = {
-        headers: { Authorization: `Bearer ${this.api_token}`, csrfToken: this.csrfToken }
+        headers: {
+          Authorization: `Bearer ${this.api_token}`,
+          csrfToken: this.csrfToken
+        }
       }
       axios
         .get('rest-auth/user/', {}, headers)
