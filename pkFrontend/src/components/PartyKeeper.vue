@@ -107,6 +107,7 @@ export default {
     return {
       token: '',
       csrfToken: '',
+      axiosInstance: null,
       // api_token: this.$store.getters.getApiToken,
       headers: { csrfToken: this.csrfToken },
       user: null,
@@ -161,8 +162,8 @@ export default {
   },
 
   created () {
-    this.csrfToken = this.$store.getCSRF
-    this.token = this.$store.getToken
+    // this.csrfToken = this.$store.getCSRF
+    // this.token = this.$store.getToken
   },
 
   computed: {
@@ -212,7 +213,8 @@ export default {
     },
 
     verification_login () {
-      const data = { email: this.email, password: this.password1 }
+      const data = { email: this.$store.state.authUser.email, password: this.$store.state.authUser.password1 }
+      console.log(this.$store.state.authUser)
       if (this.$route.query.verification === '1') {
         console.log('verification = 1')
         this.$store.dispatch('login', data)
@@ -222,6 +224,8 @@ export default {
     login () {
       const data = { email: this.email, password: this.password1 }
       this.$store.dispatch('login', data)
+        .then(response => {
+        })
     },
 
     getJwtToken () {
