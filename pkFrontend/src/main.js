@@ -20,6 +20,22 @@ import {
   faSignInAlt,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons'
+// import { store } from './store/store'
+// import axiosInstance from './axios-auth'
+
+const base = {
+  baseURL: 'http://localhost:5000/',
+  headers: {
+    // Set your Authorization to 'JWT', not Bearer!!!
+    Authorization: `JWT ${store.getters.getApiToken}`,
+    'Content-Type': 'application/json'
+  },
+  xhrFields: {
+    withCredentials: true
+  }
+}
+
+const instance = axios.create(base)
 
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt)
 
@@ -27,16 +43,20 @@ Vue.config.productionTip = false
 Vue.use(AsyncComputed)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+// Vue.prototype.$http = axios
+
+// const accessToken = localStorage.getItem('token')
+
+// if (accessToken) {
+//   axiosInstance.defaults.headers.common['Authorization'] = accessToken
+// }
 
 // const token = store.getToken
 // const csrftoken = store.getCSRF
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('ValidationProvider', ValidationProvider)
-
 axios.defaults.baseURL = 'http://localhost:5000/'
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
@@ -48,3 +68,5 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+export default instance

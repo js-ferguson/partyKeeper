@@ -1,15 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
+import axiosAuth from '../main'
+// import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
-export default new Vuex.Store({
+export const store = new Vuex.Store({
+  plugins: [createPersistedState()],
+
   state: {
-    token: '',
-    csrfToken: '',
+    jwt: '',
     api_token: '',
-    authUser: {}
+    authUser: {},
+    endpoints: {
+      // TODO: Remove hardcoding of dev endpoints
+      // obtainJWT: 'https://127.0.0.1:8000/api/v1/auth/obtain_token/',
+      // refreshJWT: 'https://127.0.0.1:8000/api/v1/auth/refresh_token/',
+      baseUrl: 'http://127.0.0.1:5000/'
+    }
   },
 
   getters: {
@@ -17,81 +29,67 @@ export default new Vuex.Store({
       return state.token
     },
 
-    getCSRF: state => {
-      return state.csrfToken
-    },
-
     getApiToken: state => {
       return state.api_token
+    },
+    getJwt: state => {
+      return state.jwt
     }
   },
 
   mutations: {
-    setToken: (state, data) => {
-      axios
-        .post('auth/obtain_token/', data, { csrfToken: state.csrfToken })
-        .then(response => {
-          console.log(response.data)
-          state.token = response.data
-        })
-        .catch(error => {
-          console.log(error.data)
-        })
+    setAuthUser (state, {
+      authUser,
+      isAuthenticated
+    }) {
+      Vue.set(state, 'authUser', authUser)
+      Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
 
-    setCSRF: state => {
-      axios
-        .get('get-csrf-token')
-        .then(response => {
-          console.log(response.data)
-          state.csrfToken = response.data
-        })
-        .catch(error => {
-          console.log(error.data)
-        })
+    setJWT: (state, data) => {
+      localStorage.setItem('token', data)
+      state.jwt = data
     },
 
     setApiToken: (state, token) => {
       state.api_token = token
-    },
-
-    setAuthUser: (state, user) => {
-      state.authUser = user
+      localStorage.setItem('token', token)
     }
+
+    // setAuthUser: (state, user) => {
+    //   state.authUser = user
+    // }
   },
 
   actions: {
-    setCSRF ({commit}, state) {
-      axios
-        .get('get-csrf-token')
-        .then(response => {
-          console.log(response.data)
-          state.csrfToken = response.data
-        })
-        .catch(error => {
-          console.log(error.data)
-        })
-    },
     signup ({commit, dispatch, state}, authData) {
       axios
         .post(
           'http://localhost:5000/rest-auth/registration/',
-          authData, {headers: {'X-CSRFToken': state.csrfToken}}
+          authData
         )
         .then((response) => {
           console.log(response.data)
           commit('setAuthUser', authData)
-          dispatch('storeUser', state.authUser)
           // here we need to dipatch the storeUser action and pass it the form data containing
           // the rest of the signup form data. Pass in state.authUser
         })
     },
+
     storeUser ({commit, state}, userData) {
       // This needs to be an axios post to a endpoint that updates user details in the database
-      axios
+      axiosAuth
         .post(
           'http://localhost:5000/user/storeUser/',
-          userData, {headers: {'X-CSRFToken': state.csrfToken}}
+          userData, {
+            // headers: {
+            //   Authorization: `JWT ${state.token}`,
+            //   'Content-Type': 'application/json'
+            // },
+            xhrFields: {
+              withCredentials: true
+            }
+          }
         )
         .then((response) => {
           console.log(response.data)
@@ -100,16 +98,33 @@ export default new Vuex.Store({
         })
     },
 
-    login ({commit, state}, authData) {
+    login ({commit, dispatch, state}, authData) {
       axios
-        .post('http://localhost:5000/rest-auth/login/', authData, {headers: {'X-CSRFToken': state.csrfToken}})
+        .post('http://localhost:5000/rest-auth/login/', authData)
         .then((response) => {
+          console.log(response)
+
           commit('setApiToken', response.data.token)
           commit('setAuthUser', response.data.user)
-          this.user = response.data.user
-          console.log(this.api_token)
-          console.log(this.user)
+          return response.data.token
+          // this.user = response.data.user
+        }).then(() => {
+          dispatch('storeUser', state.authUser)
+        })
+    },
+
+    getJWT ({commit}, data) {
+      axios
+        .post('auth/obtain_token/', data)
+        .then(response => {
+          console.log(response.data)
+          commit('setJWT', response.data)
+        })
+        .catch(error => {
+          console.log(error.data)
         })
     }
   }
 })
+
+export default store
