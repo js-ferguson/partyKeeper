@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="container component-box">
     <h4>{{ characterTitle }}</h4>
-    <form v-on:submit.prevent="createCharacter()">
+    <div class="inner-box">
+      <form v-on:submit.prevent="createCharacter()">
       <input
         type="hidden"
         name="csrfmiddlewaretoken"
@@ -16,6 +17,7 @@
       />
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    </div>
   </div>
 </template>
 
@@ -52,3 +54,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.component-box {
+  background-color: brown;
+  padding: 10px;
+}
+.inner-box {
+  margin: 10px;
+  background-color: #fafafa;
+}
+</style>

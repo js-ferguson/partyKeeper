@@ -1,5 +1,5 @@
 <template>
-  <div class="root-div">
+  <div class="container root-div">
     <h1 style="float: left">{{ msg }}</h1>
     <b-button
       class="btn btn-primary"
@@ -11,21 +11,27 @@
       >Sign Up!</b-button
     >
     <hr style="clear: both" />
-    <div class="col-md-6 left">
-      <character-component :csrfToken="csrfToken"></character-component>
-    </div>
-    <div class="col-md-6 right">
-      <stats-component
-        :title="statsTitle"
-        :chara-name="charaName"
-      ></stats-component>
-    </div>
-    <div class="col-md-12 bottom">
-      <inventory-component :title="inventoryTitle"></inventory-component>
+    <div class="row">
+        <character-component
+          v-if="appView.chara || appView.overview"
+          :csrfToken="csrfToken"
+          :class="{ 'col-12 full': appView.chara, 'col-6 overview': appView.overview }"
+        ></character-component>
+        <stats-component
+          v-if="appView.stats || appView.overview"
+          :title="statsTitle"
+          :class="{ 'col-12 full': appView.stats, 'col-6 overview': appView.overview }"
+          :chara-name="charaName"
+        ></stats-component>
+        <inventory-component
+          v-if="appView.inv || appView.overview"
+          :title="inventoryTitle"
+          :class=" { 'col-12 full': appView.inv, 'col-12 overview': appView.overview } "
+        ></inventory-component>
     </div>
     <!-- SignUp Modal -->
-    <b-modal id="signUpModal" title="Welcome Traveller">
-      <p class="">Sign up for PartyKeeper</p>
+    <b-modal id="signUpModal" title="Greetings Traveller">
+      <p class="">Sign up as a patron of our fine establishment</p>
       <form v-on:submit.prevent="register()">
         <input
           type="hidden"
@@ -94,6 +100,7 @@ import axios from 'axios'
 import CharacterComponent from './CharacterComponent'
 import InventoryComponent from './InventoryComponent'
 import StatsComponent from './StatsComponent'
+import { eventBus } from '../event-bus'
 
 export default {
   components: {
@@ -157,6 +164,12 @@ export default {
           ranged: null,
           concealed: null
         }
+      },
+      appView: {
+        overview: true,
+        stats: false,
+        inv: false,
+        chara: false
       }
     }
   },
@@ -164,6 +177,18 @@ export default {
   created () {
     // this.csrfToken = this.$store.getCSRF
     // this.token = this.$store.getToken
+    eventBus.$on('embiggen-inv', data => {
+      if (!this.appView.inv) {
+        this.appView = data
+      } else {
+        this.appView = {
+          inv: false,
+          overview: true,
+          stats: false,
+          chara: false
+        }
+      }
+    })
   },
 
   computed: {
@@ -196,7 +221,7 @@ export default {
   mounted () {
     this.token = this.$store.state.token
     this.csrfToken = this.$store.state.token
-    this.verification_login()
+    // this.verification_login()
     // this.getUser()
   },
 
@@ -223,13 +248,13 @@ export default {
 
     login () {
       const data = { email: this.email, password: this.password1 }
-      this.$store.dispatch('login', data)
+      this.$store.dispatch('getJWT', data)
         .then(response => {
         })
     },
 
     getJwtToken () {
-      const data = { email: this.email, password: this.password1 }
+      const data = { username: this.email, password: this.password1 }
       this.$store.commit('setToken', data)
       console.log(this.token)
       // this.getUser()
@@ -294,23 +319,43 @@ a {
   color: #42b983;
 }
 .left {
-  border-right: 1px solid black;
+  /* border-right: 1px solid black; */
   /* display: inline-block; */
   float: left;
   height: 500px;
+  background-color: aliceblue;
+  padding: 10px;
+  margin: 10px;
 }
 .right {
   /* display: inline-block; */
   float: right;
   height: 500px;
+  background-color: aliceblue;
+  padding: 10px;
+  margin: 10px;
 }
 .bottom {
-  border-top: 1px solid black;
+  /* border-top: 1px solid black; */
   height: 500px;
   margin-top: 515px;
+  background-color: aliceblue;
+  padding: 10px;
+  margin: 10px;
 }
 
 .root-div {
   padding: 15px;
+  background-color: #b6a4a4;
+}
+
+.full {
+  height: 1000px;
+}
+
+.overview {
+  height: 500px;
+  background-color: azure;
+  padding: 10px;
 }
 </style>

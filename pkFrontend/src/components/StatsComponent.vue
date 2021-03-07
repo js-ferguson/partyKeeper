@@ -1,7 +1,9 @@
 <template>
-  <div>
-    {{ title }}
+  <div class="container component-box">
+    <div class="inner-box">
+      {{ title }}
     <div>{{ charaName }}</div>
+    </div>
   </div>
 </template>
 
@@ -16,3 +18,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.component-box {
+  background-color: rgb(151, 126, 95);
+}
+
+</style>

@@ -18,10 +18,16 @@ from django.contrib import admin
 from django.middleware import csrf
 from django.http import JsonResponse
 from django.urls import include, path, re_path
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+#from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from django.conf.urls import url
-from allauth.account.views import confirm_email
-
+# from allauth.account.views import confirm_email
+from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 def get_csrf_token(request):
     token = csrf.get_token(request)
@@ -29,14 +35,16 @@ def get_csrf_token(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^auth/obtain_token/', obtain_jwt_token),
-    re_path(r'^auth/refresh_token/', refresh_jwt_token),
-    re_path(r'^get-csrf-token/$', get_csrf_token),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    #re_path(r'^auth/obtain_token/', obtain_jwt_token),
+    #re_path(r'^auth/refresh_token/', refresh_jwt_token),
+    #re_path(r'^get-csrf-token/$', get_csrf_token),
 
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^account/', include('allauth.urls')),
-    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
+    #url(r'^rest-auth/', include('rest_auth.urls')),
+    #url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    #url(r'^account/', include('allauth.urls')),
+    #url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
     path('', include('character.urls')),
     path('user/', include('users.urls')),
 ]
