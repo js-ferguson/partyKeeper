@@ -27,12 +27,14 @@ const base = {
   baseURL: 'http://localhost:5000/',
   headers: {
     // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `JWT ${store.getters.getApiToken}`,
-    'Content-Type': 'application/json'
-  },
-  xhrFields: {
+    Authorization: `JWT ${store.getters.getJwt}`,
+    'Content-Type': 'application/json',
     withCredentials: true
+
   }
+  // xhrFields: {
+  //   withCredentials: true
+  // }
 }
 
 const instance = axios.create(base)
