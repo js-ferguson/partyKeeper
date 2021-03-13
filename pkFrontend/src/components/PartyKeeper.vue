@@ -12,22 +12,31 @@
     >
     <hr style="clear: both" />
     <div class="row">
-        <character-component
-          v-if="appView.chara || appView.overview"
-          :csrfToken="csrfToken"
-          :class="{ 'col-12 full': appView.chara, 'col-6 overview': appView.overview }"
-        ></character-component>
-        <stats-component
-          v-if="appView.stats || appView.overview"
-          :title="statsTitle"
-          :class="{ 'col-12 full': appView.stats, 'col-6 overview': appView.overview }"
-          :chara-name="charaName"
-        ></stats-component>
-        <inventory-component
-          v-if="appView.inv || appView.overview"
-          :title="inventoryTitle"
-          :class=" { 'col-12 full': appView.inv, 'col-12 overview': appView.overview } "
-        ></inventory-component>
+      <character-component
+        v-if="appView.chara || appView.overview"
+        :csrfToken="csrfToken"
+        :class="{
+          'col-12 full': appView.chara,
+          'col-6 overview': appView.overview,
+        }"
+      ></character-component>
+      <stats-component
+        v-if="appView.stats || appView.overview"
+        :title="statsTitle"
+        :class="{
+          'col-12 full': appView.stats,
+          'col-6 overview': appView.overview,
+        }"
+        :chara-name="charaName"
+      ></stats-component>
+      <inventory-component
+        v-if="appView.inv || appView.overview"
+        :title="inventoryTitle"
+        :class="{
+          'col-12 full': appView.inv,
+          'col-12 overview': appView.overview,
+        }"
+      ></inventory-component>
     </div>
     <!-- SignUp Modal -->
     <b-modal id="signUpModal" title="Greetings Traveller">
@@ -59,17 +68,30 @@
           type="password"
         />
         <div class="mt-2">
-          <input v-model="dungeon_master" type="checkbox" id="dungeon_master" name="dungeon_master" checked />
+          <input
+            v-model="dungeon_master"
+            type="checkbox"
+            id="dungeon_master"
+            name="dungeon_master"
+            checked
+          />
           <label for="dungeon_master">Are you a DM creating a new party?</label>
         </div>
-        <input v-if="dungeon_master"
+        <input
+          v-if="dungeon_master"
           v-model="party_name"
           placeholder="Party Name:"
           name="party_name"
           type="text"
         />
         <div class="col-12">
-          <button type="submit" class="btn btn-primary mt-4" style="float: left;">Submit</button>
+          <button
+            type="submit"
+            class="btn btn-primary mt-4"
+            style="float: left"
+          >
+            Submit
+          </button>
         </div>
       </form>
     </b-modal>
@@ -177,18 +199,7 @@ export default {
   created () {
     // this.csrfToken = this.$store.getCSRF
     // this.token = this.$store.getToken
-    eventBus.$on('embiggen-inv', data => {
-      if (!this.appView.inv) {
-        this.appView = data
-      } else {
-        this.appView = {
-          inv: false,
-          overview: true,
-          stats: false,
-          chara: false
-        }
-      }
-    })
+    this.initEvenBus()
   },
 
   computed: {
@@ -226,6 +237,25 @@ export default {
   },
 
   methods: {
+    initEvenBus () {
+      eventBus.$on('embiggen', data => {
+        this.changeWindowFocus(data)
+      })
+    },
+
+    changeWindowFocus (data) {
+      if (data === 'overview') {
+        this.appView = {
+          overview: true,
+          stats: false,
+          inv: false,
+          chara: false
+        }
+      } else {
+        this.appView = data
+      }
+    },
+
     register () {
       const data = {
         email: this.email,
