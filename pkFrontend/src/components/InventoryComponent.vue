@@ -3,7 +3,7 @@
     <div>{{ title }}</div>
     <div>{{ charaClass }}</div>
     <input @click="embiggen()" type="checkbox" id="checkbox" v-model="checked">
-    <label for="checkbox">{{ checked }}</label>
+    <label for="checkbox"></label>
   </div>
 </template>
 
@@ -15,19 +15,24 @@ export default {
 
   data () {
     return {
-      charaClass: ''
+      charaClass: '',
+      checked: false,
+      focusInvPanel: {
+        overview: false,
+        inv: true,
+        stats: false,
+        chara: false
+      }
     }
   },
   methods: {
 
     embiggen () {
-      const data = {
-        inv: true,
-        overview: false,
-        stats: false,
-        chara: false
+      if (!this.checked) {
+        eventBus.$emit('embiggen', this.focusInvPanel)
+      } else {
+        eventBus.$emit('embiggen', 'overview')
       }
-      eventBus.$emit('embiggen-inv', data)
     }
   }
 }
