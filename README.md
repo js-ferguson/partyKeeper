@@ -22,7 +22,7 @@ The frontend will also utilise the DND5E API for things like character creation,
 
 ## Overview mockup
 
-![Overview mockup](https://imgur.com/a/BbNuo7b.jpg)
+![Overview mockup](https://i.imgur.com/jfzManY.png)
 
 ## Setup
 
