@@ -283,21 +283,21 @@ export default {
         })
     },
 
-    getJwtToken () {
-      const data = { username: this.email, password: this.password1 }
-      this.$store.commit('setToken', data)
-      console.log(this.token)
-      // this.getUser()
-      // axios
-      //   .post('http://localhost:5000/auth/obtain_token/', data, this.headers)
-      //   .then((response) => {
-      //     // console.log(response.data.key)
-      //     // this.$store.commit('setApiToken', response.data.key)
-      //     // console.log(this.$store.getters.getApiToken)
-      //     console.log(response)
-      //     // this.getUser()
-      //   })
-    },
+    // getJwtToken () {
+    //   const data = { username: this.email, password: this.password1 }
+    //   this.$store.commit('setToken', data)
+    //   console.log(this.token)
+    //   // this.getUser()
+    //   // axios
+    //   //   .post('http://localhost:5000/auth/obtain_token/', data, this.headers)
+    //   //   .then((response) => {
+    //   //     // console.log(response.data.key)
+    //   //     // this.$store.commit('setApiToken', response.data.key)
+    //   //     // console.log(this.$store.getters.getApiToken)
+    //   //     console.log(response)
+    //   //     // this.getUser()
+    //   //   })
+    // },
 
     // getArmor() {
     //   axios

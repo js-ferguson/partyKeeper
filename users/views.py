@@ -37,6 +37,16 @@ class GetUser(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CurrentUserView(APIView):
+    # permission_classes = (IsAuthenticated, )
+    def get(self, request):
+        query = User.objects.filter(email=request.user)
+        print(query)
+        user = request.user
+        print(request.user)
+        serializer = UserSerializer(query, many=True)
+        return Response(serializer.data)
+
 class StoreUser(APIView):
     """
     View to list all users in the system.
