@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
       // TODO: Remove hardcoding of dev endpoints
       // obtainJWT: 'https://127.0.0.1:8000/api/v1/auth/obtain_token/',
       // refreshJWT: 'https://127.0.0.1:8000/api/v1/auth/refresh_token/',
+      obtainJWT: 'http://localhost:5000/token/',
       baseUrl: 'http://127.0.0.1:5000/'
     }
   },
@@ -89,6 +90,7 @@ export const store = new Vuex.Store({
       instance
         .get('/user/get_user/')
         .then(res => {
+          console.log(res.data)
           commit('setAuthUser', res.data)
         })
     },
@@ -118,24 +120,24 @@ export const store = new Vuex.Store({
 
     login ({commit, dispatch, state}, authData) {
       axiosAuth
-        .post('http://localhost:5000/rest-auth/login/', authData)
+        .post(this.endpoints.obtainJWT, authData)
         .then((response) => {
           console.log(response)
 
-          commit('setApiToken', response.data.token)
-          commit('setAuthUser', response.data.user)
-          return response.data.token
+          commit('setApiToken', response.data.access)
+          // commit('setAuthUser', response.data.user)
+          return response.data.access
           // this.user = response.data.user
         }).then(() => {
-          console.log('dispatching storeUser')
-          dispatch('storeUser', state.authUser)
-          dispatch('getUser', state.authUser)
+          // console.log('dispatching storeUser')
+          // dispatch('storeUser', state.authUser)
+          // dispatch('getUser', state.authUser)
         })
     },
 
-    getJWT ({commit, dispatch}, data) {
+    getJWT ({commit, dispatch, state}, data) {
       axios
-        .post('token/', data)
+        .post(state.endpoints.obtainJWT, data)
         .then(response => {
           console.log(response.data)
           commit('setJWT', response.data)
@@ -153,7 +155,7 @@ const base = {
   baseURL: 'http://localhost:5000/',
   headers: {
     // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `JWT ${store.state.jwt}`,
+    Authorization: `Bearer ${store.state.jwt}`,
     'Content-Type': 'application/json'
   },
   xhrFields: {
