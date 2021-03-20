@@ -1,6 +1,7 @@
 <template>
   <div class="container root-div">
     <h1 style="float: left">{{ msg }}</h1>
+    {{ user() }}
     <b-button
       class="btn btn-primary"
       style="float: right; margin-left: 5px"
@@ -139,7 +140,7 @@ export default {
       axiosInstance: null,
       // api_token: this.$store.getters.getApiToken,
       headers: { csrfToken: this.csrfToken },
-      user: null,
+      // user: null,
       showSignUp: 0,
       msg: 'Party Keeper',
       email: '',
@@ -205,7 +206,11 @@ export default {
   computed: {
     api_token () {
       return this.$store.getters.getApiToken
-    }
+    },
+
+    user () {
+      return this.$store.state.user
+    },
   },
 
   asyncComputed: {

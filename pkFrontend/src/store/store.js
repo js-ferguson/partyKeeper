@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
-import axiosAuth from '../main'
+// import axiosAuth from '../main'
 // import { computeModeSetting } from 'vee-validate/dist/types/components/common'
 // import Cookies from 'js-cookie'
 
@@ -18,11 +18,13 @@ export const store = new Vuex.Store({
     refresh: '',
     api_token: '',
     authUser: {},
+    isAuthenticated: null,
     endpoints: {
       // TODO: Remove hardcoding of dev endpoints
       // obtainJWT: 'https://127.0.0.1:8000/api/v1/auth/obtain_token/',
       // refreshJWT: 'https://127.0.0.1:8000/api/v1/auth/refresh_token/',
       obtainJWT: 'http://localhost:5000/token/',
+      refreshJWT: 'http://localhost:5000/token/refresh/',
       baseUrl: 'http://127.0.0.1:5000/'
     }
   },
@@ -41,23 +43,20 @@ export const store = new Vuex.Store({
   },
 
   mutations: {
-    setAuthUser (state, {
-      authUser,
-      isAuthenticated
-    }) {
+    setAuthUser (state, { authUser, isAuthenticated }) {
       Vue.set(state, 'authUser', authUser)
       Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
 
     setJWT: (state, data) => {
       localStorage.setItem('token', data.access)
-      console.log(data)
+      // console.log(data)
       state.jwt = data.access
     },
 
     setRefresh: (state, data) => {
       localStorage.setItem('refresh', data.refresh)
-      console.log('refress set: ' + data.refresh)
+      // console.log('refress set: ' + data.refresh)
       state.refresh = data.refresh
     },
 
@@ -72,13 +71,10 @@ export const store = new Vuex.Store({
   },
 
   actions: {
-    signup ({commit, dispatch, state}, authData) {
+    signup ({ commit, dispatch, state }, authData) {
       axios
-        .post(
-          'http://localhost:5000/rest-auth/registration/',
-          authData
-        )
-        .then((response) => {
+        .post('http://localhost:5000/rest-auth/registration/', authData)
+        .then(response => {
           console.log(response.data)
           commit('setAuthUser', authData)
           // here we need to dipatch the storeUser action and pass it the form data containing
@@ -86,56 +82,51 @@ export const store = new Vuex.Store({
         })
     },
 
-    getUser ({commit, state}) {
-      instance
-        .get('/user/get_user/')
-        .then(res => {
-          console.log(res.data)
-          commit('setAuthUser', res.data)
-        })
+    getUser ({ commit, state }) {
+      instance.get('/user/get_user/').then(res => {
+        console.log(res.data)
+        commit('setAuthUser', res.data)
+      })
     },
 
-    storeUser ({commit, state}, userData) {
+    storeUser ({ commit, state }, userData) {
       // This needs to be an axios post to a endpoint that updates user details in the database
       instance
-        .post(
-          'user/storeUser/',
-          userData, {
-            headers: {
-              Authorization: `JWT ${state.jwt}`,
-              'Content-Type': 'application/json',
-              withCredentials: true
-            }
-            // xhrFields: {
-            //   withCredentials: true
-            // }
+        .post('user/storeUser/', userData, {
+          headers: {
+            Authorization: `JWT ${state.jwt}`,
+            'Content-Type': 'application/json',
+            withCredentials: true
           }
-        )
-        .then((response) => {
+          // xhrFields: {
+          //   withCredentials: true
+          // }
+        })
+        .then(response => {
           console.log(response.data)
           // here we need to dipatch the storeUser action and pass it the form data containing
           // the rest of the signup form data.
         })
     },
 
-    login ({commit, dispatch, state}, authData) {
-      axiosAuth
-        .post(this.endpoints.obtainJWT, authData)
-        .then((response) => {
-          console.log(response)
+    // login({ commit, dispatch, state }, authData) {
+    //   axiosAuth
+    //     .post(this.endpoints.obtainJWT, authData)
+    //     .then((response) => {
+    //       console.log(response)
 
-          commit('setApiToken', response.data.access)
-          // commit('setAuthUser', response.data.user)
-          return response.data.access
-          // this.user = response.data.user
-        }).then(() => {
-          // console.log('dispatching storeUser')
-          // dispatch('storeUser', state.authUser)
-          // dispatch('getUser', state.authUser)
-        })
-    },
+    //       commit('setApiToken', response.data.access)
+    //       // commit('setAuthUser', response.data.user)
+    //       return response.data.access
+    //       // this.user = response.data.user
+    //     }).then(() => {
+    //       // console.log('dispatching storeUser')
+    //       // dispatch('storeUser', state.authUser)
+    //       // dispatch('getUser', state.authUser)
+    //     })
+    // },
 
-    getJWT ({commit, dispatch, state}, data) {
+    getJWT ({ commit, dispatch, state }, data) {
       axios
         .post(state.endpoints.obtainJWT, data)
         .then(response => {

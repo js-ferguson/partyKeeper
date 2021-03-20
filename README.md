@@ -20,6 +20,10 @@ The frontend will also utilise the DND5E API for things like character creation,
 
 ![PartyKeeper Architecture](https://i.imgur.com/TtuTfff.jpg)
 
+## Overview mockup
+
+![Overview mockup](https://imgur.com/a/BbNuo7b)
+
 ## Setup
 
 Clone the repo
