@@ -1,14 +1,27 @@
 <template>
   <div class="container root-div">
     <h1 style="float: left">{{ msg }}</h1>
-    {{ user.screen_name }}
-    <b-button
+    <div v-if="isAuthenticated"
+      class="mt-2"
+      style="float:right;"
+      >{{ user.screen_name }}@{{ user.party_name }}
+    </div>
+    <b-button v-if="isAuthenticated"
+      class="btn btn-primary"
+      style="float: right; margin-left: 5px"
+      @click="logout"
+      >Logout</b-button
+    >
+    <b-button v-if="!isAuthenticated"
       class="btn btn-primary"
       style="float: right; margin-left: 5px"
       v-b-modal.loginModal
       >Login</b-button
     >
-    <b-button class="btn btn-primary" style="float: right" v-b-modal.signUpModal
+    <b-button v-if="!isAuthenticated"
+      class="btn btn-primary"
+      style="float: right"
+      v-b-modal.signUpModal
       >Sign Up!</b-button
     >
     <hr style="clear: both" />
@@ -68,6 +81,15 @@
           name="password2"
           type="password"
         />
+        <div class="mt-2">
+          <label class="col-12" v-if="!dungeon_master" for="party_name">Search a party to join</label>
+          <input
+            v-if="!dungeon_master"
+            v-model="party_name"
+            placeholder="Search Party:"
+            type="text"
+            />
+          </div>
         <div class="mt-2">
           <input
             v-model="dungeon_master"
@@ -210,6 +232,10 @@ export default {
 
     user () {
       return this.$store.state.authUser
+    },
+
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
     }
   },
 
@@ -286,6 +312,10 @@ export default {
       this.$store.dispatch('getJWT', data)
         .then(response => {
         })
+    },
+
+    logout () {
+      this.$store.dispatch('logout')
     },
 
     // getJwtToken () {
