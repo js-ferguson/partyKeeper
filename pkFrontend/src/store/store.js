@@ -22,7 +22,8 @@ export const store = new Vuex.Store({
       email: null,
       first_name: null,
       last_name: null,
-      screen_name: null
+      screen_name: null,
+      party_name: null
     },
     isAuthenticated: null,
     endpoints: {
@@ -36,6 +37,10 @@ export const store = new Vuex.Store({
   },
 
   getters: {
+    isAuthenticated: state => {
+      return state.jwt !== null
+    },
+
     getToken: state => {
       return state.token
     },
@@ -59,8 +64,22 @@ export const store = new Vuex.Store({
         email: userData.email,
         first_name: userData.first_name,
         last_name: userData.last_name,
-        screen_name: userData.screen_name
+        screen_name: userData.screen_name,
+        party_name: userData.party
       }
+    },
+
+    clearAuthUser: state => {
+      state.authUser = {
+        id: '',
+        email: '',
+        first_name: '',
+        last_name: '',
+        screen_name: '',
+        party_name: ''
+      }
+      state.jwt = null
+      state.refresh = null
     },
 
     setJWT: (state, data) => {
@@ -87,6 +106,7 @@ export const store = new Vuex.Store({
 
   actions: {
     signup ({ commit, dispatch, state }, authData) {
+      // Create a new user with email, password and screen name.
       axios
         .post('http://localhost:5000/rest-auth/registration/', authData)
         .then(response => {
@@ -98,50 +118,39 @@ export const store = new Vuex.Store({
     },
 
     getUser ({ commit, state }) {
+      // get the logged in user from the API and set the authUser state object.
       instance.get('/user/get_user/').then(res => {
         console.log(res.data)
         commit('setAuthUser', res.data[0])
       })
     },
 
-    storeUser ({ commit, state }, userData) {
-      // This needs to be an axios post to a endpoint that updates user details in the database
-      instance
-        .post('user/storeUser/', userData, {
-          headers: {
-            Authorization: `JWT ${state.jwt}`,
-            'Content-Type': 'application/json',
-            withCredentials: true
-          }
-          // xhrFields: {
-          //   withCredentials: true
-          // }
-        })
-        .then(response => {
-          console.log(response.data)
-          // here we need to dipatch the storeUser action and pass it the form data containing
-          // the rest of the signup form data.
-        })
+    logout ({commit}) {
+      commit('clearAuthUser')
     },
 
-    // login({ commit, dispatch, state }, authData) {
-    //   axiosAuth
-    //     .post(this.endpoints.obtainJWT, authData)
-    //     .then((response) => {
-    //       console.log(response)
-
-    //       commit('setApiToken', response.data.access)
-    //       // commit('setAuthUser', response.data.user)
-    //       return response.data.access
-    //       // this.user = response.data.user
-    //     }).then(() => {
-    //       // console.log('dispatching storeUser')
-    //       // dispatch('storeUser', state.authUser)
-    //       // dispatch('getUser', state.authUser)
+    // updateUser ({ commit, state }, userData) {
+    //   // This needs to be an axios post to a endpoint that updates user details in the database
+    //   instance
+    //     .post('user/storeUser/', userData, {
+    //       headers: {
+    //         Authorization: `JWT ${state.jwt}`,
+    //         'Content-Type': 'application/json',
+    //         withCredentials: true
+    //       }
+    //       // xhrFields: {
+    //       //   withCredentials: true
+    //       // }
+    //     })
+    //     .then(response => {
+    //       console.log(response.data)
+    //       // here we need to dipatch the storeUser action and pass it the form data containing
+    //       // the rest of the signup form data.
     //     })
     // },
 
     getJWT ({ commit, dispatch, state }, data) {
+      // This is the primary login method. Dispatches getUser to populate authUser data.
       axios
         .post(state.endpoints.obtainJWT, data)
         .then(response => {
@@ -172,7 +181,7 @@ const base = {
 const instance = axios.create(base)
 
 instance.interceptors.request.use(x => {
-  console.log(x)
+  // console.log(x)
   // I am logging stuff here to inspect the headers being used by the getUser action
   return x
 })

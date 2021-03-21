@@ -50,7 +50,6 @@ class CurrentUserView(APIView):
 class StoreUser(APIView):
     """
     View to list all users in the system.
-
     * Requires token authentication.
     * Only admin users are able to access this view.
     """
