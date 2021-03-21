@@ -1,7 +1,7 @@
 <template>
   <div class="container root-div">
     <h1 style="float: left">{{ msg }}</h1>
-    {{ user() }}
+    {{ user.screen_name }}
     <b-button
       class="btn btn-primary"
       style="float: right; margin-left: 5px"
@@ -209,8 +209,8 @@ export default {
     },
 
     user () {
-      return this.$store.state.user
-    },
+      return this.$store.state.authUser
+    }
   },
 
   asyncComputed: {
