@@ -17,7 +17,13 @@ export const store = new Vuex.Store({
     jwt: '',
     refresh: '',
     api_token: '',
-    authUser: {},
+    authUser: {
+      id: null,
+      email: null,
+      first_name: null,
+      last_name: null,
+      screen_name: null
+    },
     isAuthenticated: null,
     endpoints: {
       // TODO: Remove hardcoding of dev endpoints
@@ -43,9 +49,18 @@ export const store = new Vuex.Store({
   },
 
   mutations: {
-    setAuthUser (state, { authUser, isAuthenticated }) {
-      Vue.set(state, 'authUser', authUser)
-      Vue.set(state, 'isAuthenticated', isAuthenticated)
+    // setAuthUser (state, { authUser, isAuthenticated }) {
+    //   Vue.set(state, 'authUser', authUser)
+    //   Vue.set(state, 'isAuthenticated', isAuthenticated)
+    // },
+    setAuthUser (state, userData) {
+      state.authUser = {
+        id: userData.id,
+        email: userData.email,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        screen_name: userData.screen_name
+      }
     },
 
     setJWT: (state, data) => {
@@ -85,7 +100,7 @@ export const store = new Vuex.Store({
     getUser ({ commit, state }) {
       instance.get('/user/get_user/').then(res => {
         console.log(res.data)
-        commit('setAuthUser', res.data)
+        commit('setAuthUser', res.data[0])
       })
     },
 
