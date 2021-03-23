@@ -5,8 +5,6 @@
         <input
           type="hidden"
           name="csrfmiddlewaretoken"
-          
-          <!-- v-bind:value="csrfToken" -->
         />
         <input class="col-12"
           v-model="importCharacterData.inputName"
