@@ -1,30 +1,13 @@
 <template>
-  <div class="container component-box">
-    <h4>{{ characterTitle }}</h4>
-    <div class="inner-box">
-      <form v-on:submit.prevent="createCharacter()">
-      <input
-        type="hidden"
-        name="csrfmiddlewaretoken"
-        v-bind:value="csrfToken"
-      />
-      <input v-model="inputName" placeholder="Name:" name="name" type="text" />
-      <input
-        v-model="inputClass"
-        placeholder="Class:"
-        name="class"
-        type="text"
-      />
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    </div>
-  </div>
+<create-character></create-character>
 </template>
 
 <script>
 import axios from 'axios'
+import CreateCharacter from './CreateCharacter.vue'
 
 export default {
+  components: { CreateCharacter },
 
   props: ['csrfToken'],
 
@@ -56,7 +39,7 @@ export default {
 </script>
 <style scoped>
 .component-box {
-  background-color: brown;
+  background-color: #1d0a0a;
   padding: 10px;
 }
 .inner-box {
