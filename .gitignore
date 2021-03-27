@@ -4,3 +4,4 @@ venv
 env.py
 __pycache__
 partyKeeper/.env
+pkFrontend/node_modules/
