@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 
@@ -13,7 +13,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
 
   state: {
     jwt: localStorage.getItem('token'),
@@ -126,7 +126,7 @@ export const store = new Vuex.Store({
 
     getUser ({ commit, state }) {
       // get the logged in user from the API and set the authUser state object.
-      instance.post('/user/get_user/' + state.authUser.id + '/', {id: state.authUser.id})
+      instance.get('/user/get_user/' + state.authUser.id + '/')
         .then(res => {
           console.log(res.data)
           commit('setAuthUser', res.data)
