@@ -1,18 +1,35 @@
 <template>
-  <div class="container root-div">
-    <h1 style="float: left">{{ msg }}</h1>
-    <div v-if="isAuthenticated"
-      class="mt-2"
-      style="float:right;"
-      >{{ user.screen_name }}@{{ user.party_name }}
-    </div>
-    <b-button v-if="isAuthenticated"
-      class="btn btn-primary"
-      style="float: right; margin-left: 5px"
-      @click="logout"
-      >Logout</b-button
-    >
-    <b-button v-if="!isAuthenticated"
+<div>
+  <b-navbar type="dark" variant="dark">
+    <b-navbar-nav>
+      <b-nav-item href="#">Partykeeper</b-nav-item>
+
+      <!-- Navbar dropdowns -->
+      <!-- <b-nav-item-dropdown text="Lang" right>
+        <b-dropdown-item href="#">EN</b-dropdown-item>
+        <b-dropdown-item href="#">ES</b-dropdown-item>
+        <b-dropdown-item href="#">RU</b-dropdown-item>
+        <b-dropdown-item href="#">FA</b-dropdown-item>
+      </b-nav-item-dropdown> -->
+      <div style="float: right;">
+        <b-nav-item-dropdown v-if="isAuthenticated" right>
+        <template #button-content>
+          <em>{{ user.screen_name }}<span v-if="user.party_name">@</span>{{ user.party_name }}</em>
+        <font-awesome-icon :icon="['fas', 'cog']" />
+      </template>
+        <b-dropdown-item href="#">Account</b-dropdown-item>
+        <b-dropdown-item href="#">Settings</b-dropdown-item>
+      </b-nav-item-dropdown>
+      </div>
+    </b-navbar-nav>
+    <div class="col-4 ml-auto" style="float: right;">
+        <b-button v-if="isAuthenticated"
+        class="btn btn-primary"
+        style="float: right; margin-left: 5px"
+        @click="logout"
+      >Logout
+      </b-button>
+      <b-button v-if="!isAuthenticated"
       class="btn btn-primary"
       style="float: right; margin-left: 5px"
       v-b-modal.loginModal
@@ -24,7 +41,9 @@
       v-b-modal.signUpModal
       >Sign Up!</b-button
     >
-    <hr style="clear: both" />
+      </div>
+  </b-navbar>
+  <!-- <div class="container root-div"> -->
     <div class="row">
       <character-component
         v-if="appView.chara || appView.overview"
@@ -227,7 +246,7 @@ export default {
 
   computed: {
     api_token () {
-      return this.$store.getters.getApiToken
+      return this.$store.getters.getJWT
     },
 
     user () {

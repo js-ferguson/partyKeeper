@@ -84,7 +84,7 @@ export default {
         armorClass: this.importCharacterData.inputAC,
         inititative: this.importCharacterData.inputInitiative
       }
-
+      this.$store.dispatch('createCharacter', formData)
       console.log(formData)
     //   axios
     //     .post('api/character/create/', formData, this.headers)
