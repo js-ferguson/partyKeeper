@@ -38,13 +38,14 @@ class GetUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CurrentUserView(APIView):
+    # authentication_classes = (IsAuthenticated, )
     # permission_classes = (IsAuthenticated, )
-    def get(self, request):
-        query = User.objects.filter(email=request.user)
+    def get(self, request, id):
+        user_id = id
+        query = User.objects.get(pk=user_id)
         print(query)
-        user = request.user
-        print(request.user)
-        serializer = UserSerializer(query, many=True)
+        print(user_id)
+        serializer = UserSerializer(query)
         return Response(serializer.data)
 
 class StoreUser(APIView):
