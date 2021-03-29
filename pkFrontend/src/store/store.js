@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
-// import instance from '../axios-auth'
 import jwtDecode from 'jwt-decode'
 
 // import axiosAuth from '../main'
@@ -83,8 +82,8 @@ export const store = new Vuex.Store({
       }
       state.jwt = null
       state.refresh = null
-      // localStorage.setItem('token', null)
-      // localStorage.setItem('refresh', null)
+      localStorage.setItem('token', null)
+      localStorage.setItem('refresh', null)
     },
 
     setJWT: (state, data) => {
@@ -230,4 +229,12 @@ const base = {
 }
 
 const instance = axios.create(base)
+
+instance.interceptors.request.use(x => {
+  // console.log(x)
+  // this.dispatch('inspectJWT')
+  // I am logging stuff here to inspect the headers being used by the getUser action
+  return x
+})
+
 export default store

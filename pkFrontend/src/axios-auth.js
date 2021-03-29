@@ -25,7 +25,6 @@
 //   oStore = nstore
 // })
 
-
 // instance.interceptors.request.use(x => {
 //   // console.log(x)
 //   // this.dispatch('inspectJWT')
