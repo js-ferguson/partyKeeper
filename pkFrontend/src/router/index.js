@@ -5,6 +5,7 @@ import CharacterComponent from '@/components/CharacterComponent'
 import SignupPage from '@/components/auth/Signup.vue'
 import SigninPage from '@/components/auth/Signin.vue'
 import PartyKeeper from '@/components/PartyKeeper.vue'
+import Account from '@/components/Account.vue'
 
 Vue.use(Router)
 
@@ -17,7 +18,7 @@ export default new Router({
     //   component: PartyKeeper
     // },
     {
-      path: '/:verification?',
+      path: '/',
       name: 'PartyKeeper',
       component: PartyKeeper
     },
@@ -33,6 +34,11 @@ export default new Router({
     {
       path: '/signin',
       component: SigninPage
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: Account
     }
   ]
 })

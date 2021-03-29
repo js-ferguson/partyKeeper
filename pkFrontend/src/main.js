@@ -25,21 +25,28 @@ import {
 // import { store } from './store/store'
 // import axiosInstance from './axios-auth'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-const base = {
-  baseURL: 'http://localhost:5000/',
-  headers: {
-    // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `JWT ${store.getters.getJWT}`,
-    'Content-Type': 'application/json',
-    withCredentials: true
+// const base = {
+//   baseURL: 'http://localhost:5000/',
+//   headers: {
+//     // Set your Authorization to 'JWT', not Bearer!!!
+//     Authorization: `Bearer ${store.getters.getJWT}`,
+//     'Content-Type': 'application/json'
+//     // withCredentials: true
 
-  }
-  // xhrFields: {
-  //   withCredentials: true
-  // }
-}
+//   },
+//   xhrFields: {
+//     withCredentials: true
+//   }
+// }
+// console.log('getter' + store.state.jwt)
+// const instance = axios.create(base)
 
-const instance = axios.create(base)
+// // instance.interceptors.request.use(x => {
+// //   // console.log(x)
+// //   // this.dispatch('inspectJWT')
+// //   // I am logging stuff here to inspect the headers being used by the getUser action
+// //   return x
+// // })
 
 library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faCog)
 
@@ -73,4 +80,4 @@ new Vue({
   template: '<App/>'
 })
 
-export default instance
+// export default instance
