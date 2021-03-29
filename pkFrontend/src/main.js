@@ -6,28 +6,30 @@ import router from './router'
 import store from './store/store'
 import AsyncComputed from 'vue-async-computed'
 import axios from 'axios'
+// import jwt_decode from 'jwt-decode'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { ValidationProvider } from 'vee-validate'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import {
   faHome,
   faUser,
+  faCog,
   faUserPlus,
   faSignInAlt,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons'
 // import { store } from './store/store'
 // import axiosInstance from './axios-auth'
-
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const base = {
   baseURL: 'http://localhost:5000/',
   headers: {
     // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `JWT ${store.getters.getJwt}`,
+    Authorization: `JWT ${store.getters.getJWT}`,
     'Content-Type': 'application/json',
     withCredentials: true
 
@@ -39,7 +41,7 @@ const base = {
 
 const instance = axios.create(base)
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt)
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faCog)
 
 Vue.config.productionTip = false
 Vue.use(AsyncComputed)
@@ -61,7 +63,7 @@ Vue.component('ValidationProvider', ValidationProvider)
 axios.defaults.baseURL = 'http://localhost:5000/'
 // axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
+Vue.config.devtools = true
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

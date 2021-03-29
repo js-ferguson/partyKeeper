@@ -1,30 +1,6 @@
 <template>
-  <div class="container root-div">
-    <h1 style="float: left">{{ msg }}</h1>
-    <div v-if="isAuthenticated"
-      class="mt-2"
-      style="float:right;"
-      >{{ user.screen_name }}@{{ user.party_name }}
-    </div>
-    <b-button v-if="isAuthenticated"
-      class="btn btn-primary"
-      style="float: right; margin-left: 5px"
-      @click="logout"
-      >Logout</b-button
-    >
-    <b-button v-if="!isAuthenticated"
-      class="btn btn-primary"
-      style="float: right; margin-left: 5px"
-      v-b-modal.loginModal
-      >Login</b-button
-    >
-    <b-button v-if="!isAuthenticated"
-      class="btn btn-primary"
-      style="float: right"
-      v-b-modal.signUpModal
-      >Sign Up!</b-button
-    >
-    <hr style="clear: both" />
+<div>
+  <!-- <div class="container root-div"> -->
     <div class="row">
       <character-component
         v-if="appView.chara || appView.overview"
@@ -227,7 +203,7 @@ export default {
 
   computed: {
     api_token () {
-      return this.$store.getters.getApiToken
+      return this.$store.getters.getJWT
     },
 
     user () {

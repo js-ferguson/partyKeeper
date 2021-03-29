@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
+import jwtDecode from 'jwt-decode'
+
 // import axiosAuth from '../main'
 // import { computeModeSetting } from 'vee-validate/dist/types/components/common'
 // import Cookies from 'js-cookie'
@@ -14,9 +16,9 @@ export const store = new Vuex.Store({
   plugins: [createPersistedState()],
 
   state: {
-    jwt: '',
+    jwt: localStorage.getItem('token'),
     refresh: '',
-    api_token: '',
+    // api_token: '',
     authUser: {
       id: null,
       email: null,
@@ -41,14 +43,14 @@ export const store = new Vuex.Store({
       return state.jwt !== null
     },
 
-    getToken: state => {
-      return state.token
-    },
+    // getToken: state => {
+    //   return state.token
+    // },
 
-    getApiToken: state => {
-      return state.api_token
-    },
-    getJwt: state => {
+    // getApiToken: state => {
+    //   return state.api_token
+    // },
+    getJWT: state => {
       return state.jwt
     }
   },
@@ -80,24 +82,29 @@ export const store = new Vuex.Store({
       }
       state.jwt = null
       state.refresh = null
+      localStorage.setItem('token', null)
+      localStorage.setItem('refresh', null)
     },
 
     setJWT: (state, data) => {
       localStorage.setItem('token', data.access)
       // console.log(data)
+      const decoded = jwtDecode(data.access)
+      console.log(decoded)
       state.jwt = data.access
+      state.authUser.id = decoded.user_id
     },
 
     setRefresh: (state, data) => {
       localStorage.setItem('refresh', data.refresh)
       // console.log('refress set: ' + data.refresh)
       state.refresh = data.refresh
-    },
-
-    setApiToken: (state, token) => {
-      state.api_token = token
-      localStorage.setItem('token', token)
     }
+
+    // setApiToken: (state, token) => {
+    //   state.api_token = token
+    //   localStorage.setItem('token', token)
+    // }
 
     // setAuthUser: (state, user) => {
     //   state.authUser = user
@@ -119,10 +126,11 @@ export const store = new Vuex.Store({
 
     getUser ({ commit, state }) {
       // get the logged in user from the API and set the authUser state object.
-      instance.get('/user/get_user/').then(res => {
-        console.log(res.data)
-        commit('setAuthUser', res.data[0])
-      })
+      instance.get('/user/get_user/' + state.authUser.id + '/')
+        .then(res => {
+          console.log(res.data)
+          commit('setAuthUser', res.data)
+        })
     },
 
     logout ({commit}) {
@@ -162,6 +170,47 @@ export const store = new Vuex.Store({
         .catch(error => {
           console.log(error.data)
         })
+    },
+
+    refreshJWT () {
+      const payload = {token: this.state.jwt}
+
+      axios
+        .post(this.state.endpoints.refreshJWT, payload)
+        .then(response => {
+          this.commit('updateToken', response.data)
+        })
+        .catch(error => {
+          console.log(error.data)
+        })
+    },
+
+    inspectJWT () {
+      const token = this.state.jwt
+      if (token) {
+        const decoded = jwtDecode(token)
+        const exp = decoded.exp
+        const origIat = decoded.orig_iat
+
+        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
+          this.dispatch('refreshToken')
+        } else if (exp - (Date.now() / 1000) < 1800) {
+          // Do nothing
+        } else {
+          // prompt to relogin
+        }
+      }
+    },
+
+    createCharacter ({state}, data) {
+      instance
+        .post('api/character/create/' + state.authUser.id + '/', data)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error.data)
+        })
     }
   }
 })
@@ -182,6 +231,7 @@ const instance = axios.create(base)
 
 instance.interceptors.request.use(x => {
   // console.log(x)
+  // this.dispatch('inspectJWT')
   // I am logging stuff here to inspect the headers being used by the getUser action
   return x
 })
