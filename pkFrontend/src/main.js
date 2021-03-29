@@ -29,7 +29,7 @@ const base = {
   baseURL: 'http://localhost:5000/',
   headers: {
     // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `JWT ${store.getters.getJwt}`,
+    Authorization: `JWT ${store.getters.getJWT}`,
     'Content-Type': 'application/json',
     withCredentials: true
 

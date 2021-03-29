@@ -126,7 +126,7 @@ export const store = new Vuex.Store({
 
     getUser ({ commit, state }) {
       // get the logged in user from the API and set the authUser state object.
-      instance.post('/user/get_user/' + state.authUser.id + '/', {id: state.authUser.id})
+      instance.get('/user/get_user/' + state.authUser.id + '/')
         .then(res => {
           console.log(res.data)
           commit('setAuthUser', res.data)

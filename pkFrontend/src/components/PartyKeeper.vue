@@ -1,48 +1,5 @@
 <template>
 <div>
-  <b-navbar type="dark" variant="dark">
-    <b-navbar-nav>
-      <b-nav-item href="#">Partykeeper</b-nav-item>
-
-      <!-- Navbar dropdowns -->
-      <!-- <b-nav-item-dropdown text="Lang" right>
-        <b-dropdown-item href="#">EN</b-dropdown-item>
-        <b-dropdown-item href="#">ES</b-dropdown-item>
-        <b-dropdown-item href="#">RU</b-dropdown-item>
-        <b-dropdown-item href="#">FA</b-dropdown-item>
-      </b-nav-item-dropdown> -->
-      <div style="float: right;">
-        <b-nav-item-dropdown v-if="isAuthenticated" right>
-        <template #button-content>
-          <em>{{ user.screen_name }}<span v-if="user.party_name">@</span>{{ user.party_name }}</em>
-        <font-awesome-icon :icon="['fas', 'cog']" />
-      </template>
-        <b-dropdown-item href="#">Account</b-dropdown-item>
-        <b-dropdown-item href="#">Settings</b-dropdown-item>
-      </b-nav-item-dropdown>
-      </div>
-    </b-navbar-nav>
-    <div class="col-4 ml-auto" style="float: right;">
-        <b-button v-if="isAuthenticated"
-        class="btn btn-primary"
-        style="float: right; margin-left: 5px"
-        @click="logout"
-      >Logout
-      </b-button>
-      <b-button v-if="!isAuthenticated"
-      class="btn btn-primary"
-      style="float: right; margin-left: 5px"
-      v-b-modal.loginModal
-      >Login</b-button
-    >
-    <b-button v-if="!isAuthenticated"
-      class="btn btn-primary"
-      style="float: right"
-      v-b-modal.signUpModal
-      >Sign Up!</b-button
-    >
-      </div>
-  </b-navbar>
   <!-- <div class="container root-div"> -->
     <div class="row">
       <character-component
