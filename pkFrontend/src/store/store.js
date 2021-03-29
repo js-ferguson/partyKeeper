@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
+// import instance from '../axios-auth'
 import jwtDecode from 'jwt-decode'
 
 // import axiosAuth from '../main'
@@ -13,10 +14,10 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
 
   state: {
-    jwt: localStorage.getItem('token'),
+    jwt: '',
     refresh: '',
     // api_token: '',
     authUser: {
@@ -82,11 +83,12 @@ export const store = new Vuex.Store({
       }
       state.jwt = null
       state.refresh = null
-      localStorage.setItem('token', null)
-      localStorage.setItem('refresh', null)
+      // localStorage.setItem('token', null)
+      // localStorage.setItem('refresh', null)
     },
 
     setJWT: (state, data) => {
+      localStorage.setItem('token', '')
       localStorage.setItem('token', data.access)
       // console.log(data)
       const decoded = jwtDecode(data.access)
@@ -96,7 +98,7 @@ export const store = new Vuex.Store({
     },
 
     setRefresh: (state, data) => {
-      localStorage.setItem('refresh', data.refresh)
+      // localStorage.setItem('refresh', data.refresh)
       // console.log('refress set: ' + data.refresh)
       state.refresh = data.refresh
     }
@@ -112,7 +114,11 @@ export const store = new Vuex.Store({
   },
 
   actions: {
-    signup ({ commit, dispatch, state }, authData) {
+    signup ({
+      commit,
+      dispatch,
+      state
+    }, authData) {
       // Create a new user with email, password and screen name.
       axios
         .post('http://localhost:5000/rest-auth/registration/', authData)
@@ -124,7 +130,10 @@ export const store = new Vuex.Store({
         })
     },
 
-    getUser ({ commit, state }) {
+    getUser ({
+      commit,
+      state
+    }) {
       // get the logged in user from the API and set the authUser state object.
       instance.get('/user/get_user/' + state.authUser.id + '/')
         .then(res => {
@@ -133,31 +142,17 @@ export const store = new Vuex.Store({
         })
     },
 
-    logout ({commit}) {
+    logout ({
+      commit
+    }) {
       commit('clearAuthUser')
     },
 
-    // updateUser ({ commit, state }, userData) {
-    //   // This needs to be an axios post to a endpoint that updates user details in the database
-    //   instance
-    //     .post('user/storeUser/', userData, {
-    //       headers: {
-    //         Authorization: `JWT ${state.jwt}`,
-    //         'Content-Type': 'application/json',
-    //         withCredentials: true
-    //       }
-    //       // xhrFields: {
-    //       //   withCredentials: true
-    //       // }
-    //     })
-    //     .then(response => {
-    //       console.log(response.data)
-    //       // here we need to dipatch the storeUser action and pass it the form data containing
-    //       // the rest of the signup form data.
-    //     })
-    // },
-
-    getJWT ({ commit, dispatch, state }, data) {
+    getJWT ({
+      commit,
+      dispatch,
+      state
+    }, data) {
       // This is the primary login method. Dispatches getUser to populate authUser data.
       axios
         .post(state.endpoints.obtainJWT, data)
@@ -173,7 +168,9 @@ export const store = new Vuex.Store({
     },
 
     refreshJWT () {
-      const payload = {token: this.state.jwt}
+      const payload = {
+        token: this.state.jwt
+      }
 
       axios
         .post(this.state.endpoints.refreshJWT, payload)
@@ -202,7 +199,9 @@ export const store = new Vuex.Store({
       }
     },
 
-    createCharacter ({state}, data) {
+    createCharacter ({
+      state
+    }, data) {
       instance
         .post('api/character/create/' + state.authUser.id + '/', data)
         .then(response => {
@@ -215,12 +214,15 @@ export const store = new Vuex.Store({
   }
 })
 
+console.log('getter' + store.state.jwt)
 const base = {
   baseURL: 'http://localhost:5000/',
   headers: {
     // Set your Authorization to 'JWT', not Bearer!!!
-    Authorization: `Bearer ${store.state.jwt}`,
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'
+    // withCredentials: true
+
   },
   xhrFields: {
     withCredentials: true
@@ -228,12 +230,4 @@ const base = {
 }
 
 const instance = axios.create(base)
-
-instance.interceptors.request.use(x => {
-  // console.log(x)
-  // this.dispatch('inspectJWT')
-  // I am logging stuff here to inspect the headers being used by the getUser action
-  return x
-})
-
 export default store
