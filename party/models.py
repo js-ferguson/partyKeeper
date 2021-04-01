@@ -7,4 +7,4 @@ class Party(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.title
+        return self.name

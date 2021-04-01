@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from universe.character import Character
+# from universe.character import Character
 from rest_framework.response import Response
-from .models import Character as Cha_model
+from .models import Character
 
 
 class CreateCharacter(APIView):
@@ -35,17 +35,7 @@ class CreateCharacter(APIView):
     # return Response(content)
 
 
-def get_characters(request):
-    characters = Character
+# def get_characters(request):
+#     characters = Character
 
-    return render(request)
-
-
-def get_auth_user(request):
-    '''
-    returns the current authenticated user.
-    This needs to be moved after user reg and auth is set up
-    '''
-    if request.method == 'GET':
-        content = {'name': 'jimi'}
-    return Response(content)
+#     return render(request)
