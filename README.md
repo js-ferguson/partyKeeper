@@ -10,6 +10,8 @@ The application has scope to add session planning features including a calendar 
 
 There should be a way to have several characters kept in the application that may potentially belong to different gaming parties. 
 
+The DM should be able to allocate experience to players on the fly. There would be two categories of experience that can be awarded. RP experience and combat experience. It would be at the DMs discression as to whether they allocate experience during a session, for example RP experience might be awarded after a social encounter as a bonus to the players involved. Combat experience may be awarded at the end of a combat. The DM may also choose to award experience for the whole session at once when the session is finished. Players should receive an alert when they level up, and have the option to run the level up routine immediately or at a later time.
+
 ## Application design and architecture
 
 The application will be built on either PostgreSLQ or MariaDB. The application front end will be written in Vue.js and will consume an API that is driven by the Django REST Framework and use JWT authentication 

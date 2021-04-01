@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 import axios from 'axios'
 // import instance from '../axios-auth'
 import jwtDecode from 'jwt-decode'
@@ -14,7 +14,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export const store = new Vuex.Store({
-  // plugins: [createPersistedState()],
+  plugins: [createPersistedState()],
 
   state: {
     jwt: null,
