@@ -83,8 +83,8 @@ export const store = new Vuex.Store({
       }
       state.jwt = null
       state.refresh = null
-      // localStorage.setItem('token', null)
-      // localStorage.setItem('refresh', null)
+      localStorage.removeItem('token')
+      localStorage.removeItem('refresh')
     },
 
     setJWT: (state, data) => {
@@ -142,9 +142,7 @@ export const store = new Vuex.Store({
         })
     },
 
-    logout ({
-      commit
-    }) {
+    logout ({ commit }) {
       commit('clearAuthUser')
     },
 
