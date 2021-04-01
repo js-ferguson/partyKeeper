@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
   // plugins: [createPersistedState()],
 
   state: {
-    jwt: '',
+    jwt: null,
     refresh: '',
     // api_token: '',
     authUser: {
@@ -88,7 +88,7 @@ export const store = new Vuex.Store({
     },
 
     setJWT: (state, data) => {
-      localStorage.setItem('token', '')
+      localStorage.setItem('token', null)
       localStorage.setItem('token', data.access)
       // console.log(data)
       const decoded = jwtDecode(data.access)
