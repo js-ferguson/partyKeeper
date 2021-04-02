@@ -28,6 +28,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .views import MyTokenObtainPairView
 
 def get_csrf_token(request):
     token = csrf.get_token(request)
@@ -35,7 +36,7 @@ def get_csrf_token(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     #re_path(r'^auth/obtain_token/', obtain_jwt_token),
     #re_path(r'^auth/refresh_token/', refresh_jwt_token),

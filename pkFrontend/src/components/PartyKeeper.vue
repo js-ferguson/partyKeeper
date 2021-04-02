@@ -1,13 +1,13 @@
 <template>
-<div>
-  <!-- <div class="container root-div"> -->
+  <div>
+    <!-- <div class="container root-div"> -->
     <div class="row">
       <character-component
         v-if="appView.chara || appView.overview"
         :csrfToken="csrfToken"
         :class="{
           'col-12 full': appView.chara,
-          'col-6 overview': appView.overview,
+          'col-6 overview': appView.overview
         }"
       ></character-component>
       <stats-component
@@ -15,7 +15,7 @@
         :title="statsTitle"
         :class="{
           'col-12 full': appView.stats,
-          'col-6 overview': appView.overview,
+          'col-6 overview': appView.overview
         }"
         :chara-name="charaName"
       ></stats-component>
@@ -24,7 +24,7 @@
         :title="inventoryTitle"
         :class="{
           'col-12 full': appView.inv,
-          'col-12 overview': appView.overview,
+          'col-12 overview': appView.overview
         }"
       ></inventory-component>
     </div>
@@ -58,14 +58,16 @@
           type="password"
         />
         <div class="mt-2">
-          <label class="col-12" v-if="!dungeon_master" for="party_name">Search a party to join</label>
+          <label class="col-12" v-if="!dungeon_master" for="party_name"
+            >Search a party to join</label
+          >
           <input
             v-if="!dungeon_master"
             v-model="party_name"
             placeholder="Search Party:"
             type="text"
-            />
-          </div>
+          />
+        </div>
         <div class="mt-2">
           <input
             v-model="dungeon_master"
@@ -122,14 +124,12 @@ import CharacterComponent from './CharacterComponent'
 import InventoryComponent from './InventoryComponent'
 import StatsComponent from './StatsComponent'
 import { eventBus } from '../event-bus'
-
 export default {
   components: {
     CharacterComponent,
     InventoryComponent,
     StatsComponent
   },
-
   name: 'CharacterPage',
   data () {
     return {
@@ -194,32 +194,29 @@ export default {
       }
     }
   },
-
   created () {
     // this.csrfToken = this.$store.getCSRF
     // this.token = this.$store.getToken
     this.initEvenBus()
+    if (this.api_token && !this.user.name) {
+      this.$store.dispatch('getUser')
+    }
   },
-
   computed: {
     api_token () {
       return this.$store.getters.getJWT
     },
-
     user () {
       return this.$store.state.authUser
     },
-
     isAuthenticated () {
       return this.$store.getters.isAuthenticated
     }
   },
-
   asyncComputed: {
     getToken () {
       this.token = this.$store.state.token
     },
-
     getCSRF () {
       this.csrfToken = this.$store.state.token
     }
@@ -235,21 +232,18 @@ export default {
     //       })
     //   }
   },
-
   mounted () {
     this.token = this.$store.state.token
     this.csrfToken = this.$store.state.token
     // this.verification_login()
     // this.getUser()
   },
-
   methods: {
     initEvenBus () {
       eventBus.$on('embiggen', data => {
         this.changeWindowFocus(data)
       })
     },
-
     changeWindowFocus (data) {
       if (data === 'overview') {
         this.appView = {
@@ -262,7 +256,6 @@ export default {
         this.appView = data
       }
     },
-
     register () {
       const data = {
         email: this.email,
@@ -273,27 +266,24 @@ export default {
       }
       this.$store.dispatch('signup', data)
     },
-
     verification_login () {
-      const data = { email: this.$store.state.authUser.email, password: this.$store.state.authUser.password1 }
+      const data = {
+        email: this.$store.state.authUser.email,
+        password: this.$store.state.authUser.password1
+      }
       console.log(this.$store.state.authUser)
       if (this.$route.query.verification === '1') {
         console.log('verification = 1')
         this.$store.dispatch('login', data)
       }
     },
-
     login () {
       const data = { email: this.email, password: this.password1 }
-      this.$store.dispatch('getJWT', data)
-        .then(response => {
-        })
+      this.$store.dispatch('getJWT', data).then(response => {})
     },
-
     logout () {
       this.$store.dispatch('logout')
     },
-
     // getJwtToken () {
     //   const data = { username: this.email, password: this.password1 }
     //   this.$store.commit('setToken', data)
@@ -309,7 +299,6 @@ export default {
     //   //     // this.getUser()
     //   //   })
     // },
-
     // getArmor() {
     //   axios
     //     .post('https://ourdjangoapi/gear/armor')
@@ -321,7 +310,6 @@ export default {
     //       console.log(error.data);
     //     });
     // },
-
     getUser () {
       const headers = {
         headers: {
@@ -331,10 +319,10 @@ export default {
       }
       axios
         .get('rest-auth/user/', {}, headers)
-        .then((res) => {
+        .then(res => {
           console.log(res.data)
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error.data)
         })
     }
@@ -384,19 +372,18 @@ a {
   padding: 10px;
   margin: 10px;
 }
-
 .root-div {
   padding: 15px;
   background-color: #b6a4a4;
 }
-
 .full {
   height: 1000px;
 }
-
 .overview {
   height: 500px;
   background-color: azure;
   padding: 10px;
 }
 </style>
+© 2021 GitHub, Inc. Terms Privacy Security Status Docs Contact GitHub Pricing
+API Training Blog About

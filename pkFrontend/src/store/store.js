@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
   plugins: [createPersistedState()],
 
   state: {
-    jwt: null,
+    jwt: '',
     refresh: '',
     // api_token: '',
     authUser: {
@@ -131,9 +131,10 @@ export const store = new Vuex.Store({
     },
 
     getUser ({
-      commit,
+      commit, dispatch,
       state
     }) {
+      this.dispatch('inspectJWT')
       // get the logged in user from the API and set the authUser state object.
       instance.get('/user/get_user/' + state.authUser.id + '/')
         .then(res => {
@@ -181,11 +182,15 @@ export const store = new Vuex.Store({
     },
 
     inspectJWT () {
+      console.log('dispatch inspectJWT')
       const token = this.state.jwt
       if (token) {
         const decoded = jwtDecode(token)
+        console.log(decoded)
         const exp = decoded.exp
-        const origIat = decoded.orig_iat
+        console.log(exp)
+        const origIat = decoded.iat
+        console.log(origIat)
 
         if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
           this.dispatch('refreshToken')
@@ -212,7 +217,7 @@ export const store = new Vuex.Store({
   }
 })
 
-console.log('getter' + store.state.jwt)
+// console.log('getter' + store.state.jwt)
 const base = {
   baseURL: 'http://localhost:5000/',
   headers: {

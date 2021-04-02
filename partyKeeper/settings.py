@@ -145,14 +145,14 @@ SIMPLE_JWT = {
 #   'JWT_AUTH_COOKIE': None,
 # }
 
-# JWT_AUTH = {
-#     # 'JWT_ALLOW_REFRESH': True,
-#     # 'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-#     # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-#     # 'JWT_DECODE_HANDLER': 'rest_framework_jwt.utils.jwt_decode_handler',
-#     # 'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
-#     # 'JWT_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_payload_handler',
-# }
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_DECODE_HANDLER': 'rest_framework_jwt.utils.jwt_decode_handler',
+    'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
+    'JWT_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_payload_handler',
+}
 # Django-allauth settings
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
