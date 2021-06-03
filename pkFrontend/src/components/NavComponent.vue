@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <b-navbar type="dark" variant="dark">
       <b-navbar-nav>
         <b-nav-item><router-link to="/">Partykeeper</router-link></b-nav-item>
