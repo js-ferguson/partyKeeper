@@ -1,42 +1,48 @@
 <template>
   <div class="container component-box">
     <div class="row">
-      <form class="col-12" v-on:submit.prevent="createCharacter(importCharacterData)">
+      <form
+        class="col-12"
+        v-on:submit.prevent="createCharacter(importCharacterData)"
+      >
+        <input type="hidden" name="csrfmiddlewaretoken" />
         <input
-          type="hidden"
-          name="csrfmiddlewaretoken"
-        />
-        <input class="col-12"
+          class="col-12"
           v-model="importCharacterData.inputName"
           placeholder="Name:"
           name="name"
           type="text"
         />
-        <input class="col-12"
+        <input
+          class="col-12"
           v-model="importCharacterData.inputClass"
           placeholder="Class:"
           name="class"
           type="text"
         />
-         <input class="col-12"
+        <input
+          class="col-12"
           v-model="importCharacterData.inputRace"
           placeholder="Race:"
           name="race"
           type="text"
         />
-         <input class="col-12"
+        <input
+          class="col-12"
           v-model="importCharacterData.inputAC"
           placeholder="Armor Class:"
           name="ac"
           type="text"
         />
-         <input class="col-12"
+        <input
+          class="col-12"
           v-model="importCharacterData.inputHP"
           placeholder="Health Points:"
           name="hp"
           type="text"
         />
-         <input class="col-12"
+        <input
+          class="col-12"
           v-model="importCharacterData.inputInitiative"
           placeholder="Initiative:"
           name="initiative"
@@ -76,25 +82,34 @@ export default {
 
   methods: {
     createCharacter () {
+      const {
+        inputName,
+        inputClass,
+        inputRace,
+        inputHP,
+        inputAC,
+        inputInitiative
+      } = this.importCharacterData
+
       const formData = {
-        name: this.importCharacterData.inputName,
-        class: this.importCharacterData.inputClass,
-        race: this.importCharacterData.inputRace,
-        hitPoints: this.importCharacterData.inputHP,
-        armorClass: this.importCharacterData.inputAC,
-        inititative: this.importCharacterData.inputInitiative
+        name: inputName,
+        class: inputClass,
+        race: inputRace,
+        hitPoints: inputHP,
+        armorClass: inputAC,
+        inititative: inputInitiative
       }
       this.$store.dispatch('createCharacter', formData)
       console.log(formData)
-    //   axios
-    //     .post('api/character/create/', formData, this.headers)
-    //     .then((response) => {
-    //       console.log(response.data)
-    //       this.charaName = response.data.returncontent
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.data)
-    //     })
+      //   axios
+      //     .post('api/character/create/', formData, this.headers)
+      //     .then((response) => {
+      //       console.log(response.data)
+      //       this.charaName = response.data.returncontent
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.data)
+      //     })
     }
   }
 }

@@ -45,9 +45,9 @@
           type="text"
         />
         <input
-          v-model="password1"
+          v-model="password"
           placeholder="Password:"
-          name="password1"
+          name="password"
           type="password"
         />
         <input
@@ -107,9 +107,9 @@
         />
         <input v-model="email" placeholder="Email:" name="email" type="text" />
         <input
-          v-model="password1"
+          v-model="password"
           placeholder="Password:"
-          name="password1"
+          name="password"
           type="text"
         />
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -145,7 +145,7 @@ export default {
       dob: '',
       first_name: '',
       last_name: '',
-      password1: '',
+      password: '',
       password2: '',
       dungeon_master: false,
       party_name: '',
@@ -259,7 +259,7 @@ export default {
     register () {
       const data = {
         email: this.email,
-        password1: this.password1,
+        password: this.password,
         password2: this.password2,
         party_name: this.party_name,
         dungeon_master: this.dungeon_master
@@ -269,7 +269,7 @@ export default {
     verification_login () {
       const data = {
         email: this.$store.state.authUser.email,
-        password: this.$store.state.authUser.password1
+        password: this.$store.state.authUser.password
       }
       console.log(this.$store.state.authUser)
       if (this.$route.query.verification === '1') {
@@ -278,7 +278,7 @@ export default {
       }
     },
     login () {
-      const data = { email: this.email, password: this.password1 }
+      const data = { email: this.email, password: this.password }
       this.$store.dispatch('getJWT', data).then(response => {})
     },
     logout () {
