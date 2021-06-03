@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container root-div">
     <!-- <div class="container root-div"> -->
     <div class="row">
       <character-component
@@ -373,8 +373,8 @@ a {
   margin: 10px;
 }
 .root-div {
-  padding: 15px;
-  background-color: #b6a4a4;
+  padding: 0 30px 0 30px;
+  /* background-color: #b6a4a4; */
 }
 .full {
   height: 1000px;
