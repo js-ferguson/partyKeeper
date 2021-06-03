@@ -88,12 +88,14 @@ export const store = new Vuex.Store({
     },
 
     setJWT: (state, data) => {
+      state.jwt = data.access
       localStorage.setItem('token', null)
       localStorage.setItem('token', data.access)
-      // console.log(data)
+      console.log(localStorage.getItem('token'))
+      // console.log(data.access)
       const decoded = jwtDecode(data.access)
-      console.log(decoded)
-      state.jwt = data.access
+      // console.log(decoded)
+      // state.jwt = localStorage.getItem('token')
       state.authUser.id = decoded.user_id
     },
 
@@ -114,55 +116,46 @@ export const store = new Vuex.Store({
   },
 
   actions: {
-    signup ({
-      commit,
-      dispatch,
-      state
-    }, authData) {
+    async signup ({ commit, dispatch, state }, authData) {
       // Create a new user with email, password and screen name.
-      axios
-        .post('http://localhost:5000/rest-auth/registration/', authData)
-        .then(response => {
-          console.log(response.data)
-          commit('setAuthUser', authData)
-          // here we need to dipatch the storeUser action and pass it the form data containing
-          // the rest of the signup form data. Pass in state.authUser
-        })
+      try {
+        let response = await axios.post(
+          'http://localhost:5000/user/register/',
+          authData
+        )
+        console.log(response)
+        commit('setAuthUser', authData)
+      } catch (err) {
+        console.log(err)
+      }
+      // here we need to dipatch the storeUser action and pass it the form data containing
+      // the rest of the signup form data. Pass in state.authUser
     },
 
-    getUser ({
-      commit, dispatch,
-      state
-    }) {
+    getUser ({ commit, dispatch, state }) {
       this.dispatch('inspectJWT')
       // get the logged in user from the API and set the authUser state object.
-      instance.get('/user/get_user/' + state.authUser.id + '/')
-        .then(res => {
-          console.log(res.data)
-          commit('setAuthUser', res.data)
-        })
+      instance.get('/user/get_user/' + state.authUser.id + '/').then(res => {
+        commit('setAuthUser', res.data)
+      })
     },
 
     logout ({ commit }) {
       commit('clearAuthUser')
     },
 
-    getJWT ({
-      commit,
-      dispatch,
-      state
-    }, data) {
+    getJWT ({ commit, dispatch, state }, data) {
       // This is the primary login method. Dispatches getUser to populate authUser data.
       axios
         .post(state.endpoints.obtainJWT, data)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           commit('setJWT', response.data)
           commit('setRefresh', response.data)
           dispatch('getUser')
         })
         .catch(error => {
-          console.log(error.data)
+          console.log(error)
         })
     },
 
@@ -182,19 +175,22 @@ export const store = new Vuex.Store({
     },
 
     inspectJWT () {
-      console.log('dispatch inspectJWT')
+      // console.log('dispatch inspectJWT')
       const token = this.state.jwt
       if (token) {
         const decoded = jwtDecode(token)
-        console.log(decoded)
+        // console.log(decoded)
         const exp = decoded.exp
-        console.log(exp)
+        // console.log(exp)
         const origIat = decoded.iat
-        console.log(origIat)
+        // console.log(origIat)
 
-        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
+        if (
+          exp - Date.now() / 1000 < 1800 &&
+          Date.now() / 1000 - origIat < 628200
+        ) {
           this.dispatch('refreshToken')
-        } else if (exp - (Date.now() / 1000) < 1800) {
+        } else if (exp - Date.now() / 1000 < 1800) {
           // Do nothing
         } else {
           // prompt to relogin
@@ -202,9 +198,7 @@ export const store = new Vuex.Store({
       }
     },
 
-    createCharacter ({
-      state
-    }, data) {
+    createCharacter ({ state }, data) {
       instance
         .post('api/character/create/' + state.authUser.id + '/', data)
         .then(response => {
@@ -225,7 +219,6 @@ const base = {
     Authorization: `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'
     // withCredentials: true
-
   },
   xhrFields: {
     withCredentials: true
